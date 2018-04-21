@@ -1,59 +1,19 @@
 fileFormatVersion: 2
-guid: 8fa821c2cfa979b4cb306c3ac5cd1776
-timeCreated: 1524316085
+guid: 59a6d8fdacff6c64dbef14a8aae1a328
+timeCreated: 1524320944
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: Boat
-    100002: //RootNode
-    100004: Cube
-    100006: Voile1
-    100008: Voile2
-    100010: Armature
-    100012: Base
-    100014: Mast
-    100016: Mast1
-    100018: Mast1Sail
-    100020: Mast2
-    100022: Mast2Sail
-    100024: Sail1
-    100026: Sail2
-    400000: Boat
-    400002: //RootNode
-    400004: Cube
-    400006: Voile1
-    400008: Voile2
-    400010: Armature
-    400012: Base
-    400014: Mast
-    400016: Mast1
-    400018: Mast1Sail
-    400020: Mast2
-    400022: Mast2Sail
-    400024: Sail1
-    400026: Sail2
+    100000: //RootNode
+    400000: //RootNode
     2100000: unnamed
     2100002: Material
-    2300000: Boat
-    2300002: Cube
-    2300004: Voile1
-    2300006: Voile2
-    3300000: Boat
-    3300002: Cube
-    3300004: Voile1
-    3300006: Voile2
-    4300000: Voile2
-    4300002: Voile1
-    4300004: Boat
-    4300006: Cube
-    4300008: Sail2
-    4300010: Sail1
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Buoy
     7400000: Default Take
     9500000: //RootNode
-    13700000: Boat
-    13700002: Sail1
-    13700004: Sail2
   externalObjects: {}
   materials:
     importMaterials: 1
