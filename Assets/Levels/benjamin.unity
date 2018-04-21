@@ -667,9 +667,13 @@ MonoBehaviour:
   buoy: {fileID: 2071237375}
   menu: {fileID: 558314604}
   sea: {fileID: 1273229950}
-  boatRotationSpeed: 150
+  boatRotationSpeed: 200
+  boatAcceleration: 1
+  boatMaxSpeed: 0.5
+  boatDrag: 1
   stickyUpRate: 30
   stickyDownRate: 9.8
+  stickyTiltRate: 9.8
   stickyOffset: -0.05
 --- !u!4 &1273229949 stripped
 Transform:

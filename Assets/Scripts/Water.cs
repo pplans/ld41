@@ -11,11 +11,13 @@ public class Water : MonoBehaviour
 	public float sea_speed = 1.0f;
 	public float sea_freq = 0.1f;
 
-	// Use this for initialization
-	void Start ()
-	{
+    public Vector3 Offset;
 
-	}
+    // Use this for initialization
+    void Start ()
+	{
+        Offset = Vector3.zero;
+    }
 
 	void Update()
 	{
@@ -24,7 +26,7 @@ public class Water : MonoBehaviour
 		int i = 0;
 		while (i < vertices.Length)
 		{
-			vertices[i].y = WaterLib.sea_map(vertices[i], time, sea_choppy, sea_level, sea_speed, sea_freq);
+			vertices[i].y = WaterLib.sea_map(Offset + vertices[i], time, sea_choppy, sea_level, sea_speed, sea_freq);
 			i++;
 		}
 		mesh.vertices = vertices;
@@ -77,9 +79,9 @@ public class Water : MonoBehaviour
 
 		outwnormal = Vector3.up;
         outwpos = wpos;
-        p1.y = WaterLib.sea_map(p1, time, sea_choppy, sea_level, sea_speed, sea_freq);
-		p2.y = WaterLib.sea_map(p2, time, sea_choppy, sea_level, sea_speed, sea_freq);
-		p3.y = WaterLib.sea_map(p3, time, sea_choppy, sea_level, sea_speed, sea_freq);
+        p1.y = WaterLib.sea_map(Offset + p1, time, sea_choppy, sea_level, sea_speed, sea_freq);
+		p2.y = WaterLib.sea_map(Offset + p2, time, sea_choppy, sea_level, sea_speed, sea_freq);
+		p3.y = WaterLib.sea_map(Offset + p3, time, sea_choppy, sea_level, sea_speed, sea_freq);
 		outwnormal = Vector3.Cross(p3-p1, p2-p1);
 		outwnormal.y = Mathf.Abs(outwnormal.y);
 		outwpos.y = 0.33f * (p1.y + p2.y + p3.y);
