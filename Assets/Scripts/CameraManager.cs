@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Camera : MonoBehaviour {
+public class CameraManager : MonoBehaviour {
 
 	// set the desired aspect ratio (the values in this example are
 	// hard-coded for 16:9, but you could make them into public
