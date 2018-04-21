@@ -39,11 +39,22 @@ public class WorldUpdater : MonoBehaviour {
         // Player Boat
         sea.GetSurfacePosAndNormalForWPos(playerBoat.transform.position, out pos, out normal);
         playerBoat.transform.position = pos;
+		playerBoat.transform.rotation = Quaternion.LookRotation(normal, Vector3.forward);
 
-        // Buoy
-        sea.GetSurfacePosAndNormalForWPos(buoy.transform.position, out pos, out normal);
+		Debug.DrawLine(pos, pos + playerBoat.transform.rotation * Vector3.forward * 40.0f, Color.red);
+		Debug.DrawLine(pos, pos + playerBoat.transform.rotation * Vector3.up * 40.0f, Color.green);
+		Debug.DrawLine(pos, pos + playerBoat.transform.rotation * Vector3.right * 40.0f, Color.blue);
+
+		// Buoy
+		sea.GetSurfacePosAndNormalForWPos(buoy.transform.position, out pos, out normal);
         buoy.transform.position = pos;
-    }
+		buoy.transform.rotation = Quaternion.LookRotation(normal, Vector3.forward);
+		//buoy.transform.LookAt(pos+Vector3.up, normal.normalized);
+
+		Debug.DrawLine(pos, pos + buoy.transform.rotation * Vector3.forward * 40.0f, Color.red);
+		Debug.DrawLine(pos, pos + buoy.transform.rotation * Vector3.up * 40.0f, Color.green);
+		Debug.DrawLine(pos, pos + buoy.transform.rotation * Vector3.right * 40.0f, Color.blue);
+	}
 
     // Update is called once per frame
     void Update () {

@@ -60,8 +60,8 @@ public class Water : MonoBehaviour
 			height += nearestPoints[k].y * 0.33f;
 		}
 		normal = Vector3.Cross(nearestPoints[2] - nearestPoints[0], nearestPoints[1] - nearestPoints[0]);
-		Debug.DrawRay(nearestPoints[0], nearestPoints[2] - nearestPoints[0]);
-		Debug.DrawRay(nearestPoints[0], nearestPoints[1] - nearestPoints[0]);
+		Debug.DrawRay(nearestPoints[0], (nearestPoints[2] - nearestPoints[0])*10.0f);
+		Debug.DrawRay(nearestPoints[0], (nearestPoints[1] - nearestPoints[0])*10.0f);
 		Debug.DrawRay(new Vector3(p.x, height, p.y), normal);
 		normal.y = Mathf.Abs(normal.y);
 
@@ -83,6 +83,8 @@ public class Water : MonoBehaviour
 		outwnormal = Vector3.Cross(p3-p1, p2-p1);
 		outwnormal.y = Mathf.Abs(outwnormal.y);
 		outwpos.y = 0.33f * (p1.y + p2.y + p3.y);
+
+		Debug.DrawLine(outwpos, outwpos+outwnormal * 400.0f, Color.green);
 
 		/*outwpos = wpos;
 		outwpos.y = getHeightAtPoint(new Vector3(wpos.x, wpos.z), out outwnormal);*/
