@@ -24,7 +24,7 @@ public class Water : MonoBehaviour
 		int i = 0;
 		while (i < vertices.Length)
 		{
-			vertices[i].y = Mathf.Sin(WaterLib.sea_map(vertices[i], time, sea_choppy, sea_level, sea_speed, sea_freq));
+			vertices[i].y = WaterLib.sea_map(vertices[i], time, sea_choppy, sea_level, sea_speed, sea_freq);
 			i++;
 		}
 		mesh.vertices = vertices;
@@ -57,4 +57,11 @@ public class Water : MonoBehaviour
 		for (int k = 0; k < 3; ++k) height+=nearestPoints[k].y*0.33f;
 		return height;
 	}
+    
+    public void GetSurfacePosAndNormalForWPos(Vector3 wpos, out Vector3 outwpos, out Vector3 outwnormal)
+    {
+        outwnormal = Vector3.up;
+        outwpos = wpos;
+        outwpos.y = WaterLib.sea_map(wpos, time, sea_choppy, sea_level, sea_speed, sea_freq);
+    }
 }

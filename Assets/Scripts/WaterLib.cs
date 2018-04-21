@@ -71,6 +71,6 @@ public class WaterLib {
 			freq *= 1.9f; amp *= 0.22f;
 			choppy = Mathf.Lerp(choppy, 1.0f, 0.2f);
 		}
-		return p.y - h;
+		return /*p.y - */h;
 	}
 }
