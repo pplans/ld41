@@ -10,6 +10,7 @@ public class Water : MonoBehaviour
 	public float sea_level = 0.5f;
 	public float sea_speed = 1.0f;
 	public float sea_freq = 0.1f;
+    public float sea_offset_uvfactor = 0.1f;
 
     public Vector3 Offset;
 
@@ -19,7 +20,13 @@ public class Water : MonoBehaviour
         Offset = Vector3.zero;
     }
 
-	void Update()
+    void LateUpdate()
+    {
+        Material material = GetComponent<Renderer>().material;
+        material.SetVector("_BoatPosition",new Vector4(-Offset.x, -Offset.z) * sea_offset_uvfactor);
+    }
+
+    void Update()
 	{
 		Mesh mesh = GetComponent<MeshFilter>().mesh;
 		Vector3[] vertices = mesh.vertices;
