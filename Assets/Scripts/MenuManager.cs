@@ -66,9 +66,9 @@ namespace Input
 	}
 }
 
-public class GameManager : MonoBehaviour
+public class MenuManager : MonoBehaviour
 {
-	public static GameManager instance = null;
+	public static MenuManager instance = null;
 	public enum GameState
 	{
 		START,
