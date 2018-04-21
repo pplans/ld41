@@ -81,6 +81,8 @@ public class MenuManager : MonoBehaviour
 
 
 	private GameState m_state;
+	public GameObject m_UI;
+	public GameObject m_3D;
 
 	void Awake()
 	{
@@ -95,6 +97,10 @@ public class MenuManager : MonoBehaviour
 	void InitGame()
 	{
 		m_state = GameState.MENU;
+		m_3D.tag = "3DCam";
+		m_3D.SetActive(false);
+		m_UI.SetActive(true);
+		m_UI.tag = "MainCamera";
 		m_menu.SetActive(true);
 	}
 
@@ -102,6 +108,10 @@ public class MenuManager : MonoBehaviour
 	{
 		if(m_state == GameState.MENU)
 		{
+			m_3D.tag = "MainCamera";
+			m_3D.SetActive(true);
+			m_UI.SetActive(false);
+			m_UI.tag = "UICam";
 			// start the game here
 			Debug.Log("StartGame");
 			m_state = GameState.PLAYING;
@@ -163,10 +173,6 @@ public class MenuManager : MonoBehaviour
 
 	void CaptureKeyboard()
 	{
-		//foreach (KeyValuePair<Input.Action, Input.ActionEntry> entry in Input.Mapper.Actions)
-		//{
-			//	for (int i = 0; i < Input.Mapper.Actions.Count; ++i)
-			//{
 		for (int index = 0; index < Input.Mapper.Actions.Length; index++)
 		{
 			Input.ActionEntry input = Input.Mapper.Actions[index];
