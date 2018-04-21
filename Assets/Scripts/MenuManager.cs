@@ -97,7 +97,7 @@ public class MenuManager : MonoBehaviour
 	void InitGame()
 	{
 		m_state = GameState.MENU;
-		m_3D.tag = "3DCam";
+		m_3D.tag = "Untagged";
 		m_3D.SetActive(false);
 		m_UI.SetActive(true);
 		m_UI.tag = "MainCamera";
@@ -111,7 +111,7 @@ public class MenuManager : MonoBehaviour
 			m_3D.tag = "MainCamera";
 			m_3D.SetActive(true);
 			m_UI.SetActive(false);
-			m_UI.tag = "UICam";
+			m_UI.tag = "Untagged";
 			// start the game here
 			Debug.Log("StartGame");
 			m_state = GameState.PLAYING;
