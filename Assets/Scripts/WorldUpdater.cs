@@ -5,9 +5,11 @@ using UnityEngine;
 public class WorldUpdater : MonoBehaviour {
 
     public GameObject playerBoat;
-    public GameObject buoy;
     public MenuManager menu;
     public Water sea;
+
+    public Object buoyPrefab;
+    private List<GameObject> instanciatedBuoys;
 
     public float boatRotationSpeed = 200.0f;
     public float boatAcceleration = 2.0f;
@@ -20,9 +22,22 @@ public class WorldUpdater : MonoBehaviour {
     public float stickyTiltRate = 9.8f;
     public float stickyOffset = -0.05f;
 
+    public float seaWidth = 12.0f; // supposed to be 10 but we had a margin
+
     // Use this for initialization
     void Start () {
         boatCurrentSpeed = 0.0f;
+        instanciatedBuoys = new List<GameObject>();
+
+        // Generate some buoys
+        for (int i=0; i < 100; i++)
+        {
+            GameObject newObject = Instantiate(buoyPrefab) as GameObject;
+            Vector3 newObjectPos = Random.onUnitSphere * 100;
+            newObjectPos.y = 0.0f;
+            newObject.transform.position = newObjectPos;
+            instanciatedBuoys.Add(newObject);
+        }
     }
 
     // Update player, returns the sea offset
@@ -56,7 +71,9 @@ public class WorldUpdater : MonoBehaviour {
 
         List<GameObject> objects = new List<GameObject>();
         objects.Add(playerBoat);
-        objects.Add(buoy);
+
+        foreach (var go in instanciatedBuoys)
+            objects.Add(go);
 
         Quaternion fixQuaternion = Quaternion.Euler(90, 0, 0) * Quaternion.Euler(0, 180, 0);
 
@@ -83,9 +100,24 @@ public class WorldUpdater : MonoBehaviour {
         deltaPlayerPos.y = 0.0f;
 
         sea.Offset += deltaPlayerPos;
-        buoy.transform.position -= deltaPlayerPos;
+        
+        foreach (var go in instanciatedBuoys)
+            go.transform.position -= deltaPlayerPos;
     }
-    
+
+    bool IsInsideSea(Vector3 pos)
+    {
+        Rect seaRect = new Rect(Vector2.one * -seaWidth / 2, Vector2.one * seaWidth);
+        return seaRect.Contains(new Vector2(pos.x, pos.z));
+    }
+
+    void ClipEverythingOutsideSea()
+    {
+        foreach (var go in instanciatedBuoys)
+            foreach (var comp in go.GetComponentsInChildren<Renderer>())
+                comp.enabled = IsInsideSea(go.transform.position);
+    }
+
     // Update is called once per frame
     void Update () {
         if (menu.GetState() != MenuManager.GameState.PLAYING)
@@ -95,5 +127,7 @@ public class WorldUpdater : MonoBehaviour {
 
         MoveEverythingWithPlayer(playerOffset);
         StickEverythingToSea();
+
+        ClipEverythingOutsideSea();
 	}
 }
