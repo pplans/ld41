@@ -6,6 +6,7 @@
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
 		_SpeedBoatWind("SpeedBoatWind", Vector) = (1, 0, 1, 0)
+    _BoatPosition("BoatPosition", Vector) = (0, 0, 0, 0)
 		_UVTiling("UVTiling", Float) = 1.0
 	}
 	SubShader {
@@ -30,6 +31,7 @@
 		half _Metallic;
 		fixed4 _Color;
 		float4 _SpeedBoatWind;
+    float4 _BoatPosition;
 		float _UVTiling;
 
 		// Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
@@ -43,10 +45,10 @@
 			// Albedo comes from a texture tinted by color
 			float2 speedBoat = max(float2(0.001, 0.001), _SpeedBoatWind.xy);
 			float2 speedWind = max(float2(0.001, 0.001), _SpeedBoatWind.zw);
-			float2 uv = _UVTiling * (IN.uv_DFFTex + (_Time.xx*speedBoat.xy*speedWind.xy));
+			float2 uv = _BoatPosition.xy + _UVTiling * (IN.uv_DFFTex + (_Time.xx*speedBoat.xy*speedWind.xy));
 			fixed4 c = tex2D(_DFFTex, uv) * _Color;
 			o.Albedo = c.rgb;
-			o.Normal = tex2D(_NormTex, uv);
+			o.Normal = UnpackNormal(tex2D(_NormTex, uv));
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;

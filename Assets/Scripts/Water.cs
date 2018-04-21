@@ -22,17 +22,16 @@ public class Water : MonoBehaviour
 	public float sea_level = 0.5f;
 	public float sea_speed = 1.0f;
 	public float sea_freq = 0.1f;
+    public float sea_offset_uvfactor = 0.1f;
 
-	private List<Vector3>	m_vertices;
-	private List<Vector3>	m_normals;
-	private List<int>		m_indices;
+	public Vector3 Offset;
 
 	// Use this for initialization
 	void Start ()
 	{
 		Clear();
+		Offset = Vector3.zero;
 		Generate(5, 1.0f, -1.0f);
-		//UpdateMesh();
 	}
 
 	void Clear()
@@ -189,23 +188,20 @@ public class Water : MonoBehaviour
 		GetComponent<MeshFilter>().mesh = m_mesh;
 	}
 
-	void UpdateMesh()
-	{
-		Mesh mesh = GetComponent<MeshFilter>().mesh;
-		mesh.vertices = m_vertices.ToArray();
-		mesh.normals = m_normals.ToArray();
-		mesh.SetIndices(m_indices.ToArray(), MeshTopology.Triangles, 0);
-		mesh.RecalculateBounds();
-	}
+    void LateUpdate()
+    {
+        Material material = GetComponent<Renderer>().material;
+        material.SetVector("_BoatPosition",new Vector4(-Offset.x, -Offset.z) * sea_offset_uvfactor);
+    }
 
-	void Update()
+    void Update()
 	{
 		Mesh mesh = GetComponent<MeshFilter>().mesh;
 		Vector3[] vertices = mesh.vertices;
 		int i = 0;
 		while (i < vertices.Length/2)
 		{
-			vertices[i].y = WaterLib.sea_map(vertices[i], time, sea_choppy, sea_level, sea_speed, sea_freq);
+			vertices[i].y = WaterLib.sea_map(Offset + vertices[i], time, sea_choppy, sea_level, sea_speed, sea_freq);
 			i++;
 		}
 		mesh.vertices = vertices;
@@ -258,14 +254,12 @@ public class Water : MonoBehaviour
 
 		outwnormal = Vector3.up;
         outwpos = wpos;
-        p1.y = WaterLib.sea_map(p1, time, sea_choppy, sea_level, sea_speed, sea_freq);
-		p2.y = WaterLib.sea_map(p2, time, sea_choppy, sea_level, sea_speed, sea_freq);
-		p3.y = WaterLib.sea_map(p3, time, sea_choppy, sea_level, sea_speed, sea_freq);
+        p1.y = WaterLib.sea_map(Offset + p1, time, sea_choppy, sea_level, sea_speed, sea_freq);
+		p2.y = WaterLib.sea_map(Offset + p2, time, sea_choppy, sea_level, sea_speed, sea_freq);
+		p3.y = WaterLib.sea_map(Offset + p3, time, sea_choppy, sea_level, sea_speed, sea_freq);
 		outwnormal = Vector3.Cross(p3-p1, p2-p1);
 		outwnormal.y = Mathf.Abs(outwnormal.y);
 		outwpos.y = 0.33f * (p1.y + p2.y + p3.y);
-
-		Debug.DrawLine(outwpos, outwpos+outwnormal * 400.0f, Color.green);
 
 		/*outwpos = wpos;
 		outwpos.y = getHeightAtPoint(new Vector3(wpos.x, wpos.z), out outwnormal);*/
