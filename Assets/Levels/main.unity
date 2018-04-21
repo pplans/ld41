@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 83023440}
   - component: {fileID: 83023439}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: 3DCam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -444,6 +444,20 @@ Prefab:
     - target: {fileID: 4369607476527954, guid: 85311974839d0df4fa1ba005c883b159, type: 2}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 64506236795845626, guid: 85311974839d0df4fa1ba005c883b159,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 33338475502197494, guid: 85311974839d0df4fa1ba005c883b159,
+        type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+    - target: {fileID: 1934979652618972, guid: 85311974839d0df4fa1ba005c883b159, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 85311974839d0df4fa1ba005c883b159, type: 2}
