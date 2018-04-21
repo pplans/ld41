@@ -455,12 +455,22 @@ Prefab:
     - target: {fileID: 114901613262150626, guid: 85311974839d0df4fa1ba005c883b159,
         type: 2}
       propertyPath: sea_level
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114901613262150626, guid: 85311974839d0df4fa1ba005c883b159,
         type: 2}
       propertyPath: sea_choppy
-      value: 20
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114901613262150626, guid: 85311974839d0df4fa1ba005c883b159,
+        type: 2}
+      propertyPath: sea_speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114901613262150626, guid: 85311974839d0df4fa1ba005c883b159,
+        type: 2}
+      propertyPath: sea_freq
+      value: 0.15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 85311974839d0df4fa1ba005c883b159, type: 2}
@@ -658,6 +668,9 @@ MonoBehaviour:
   menu: {fileID: 558314604}
   sea: {fileID: 1273229950}
   boatRotationSpeed: 150
+  stickyUpRate: 30
+  stickyDownRate: 9.8
+  stickyOffset: -0.05
 --- !u!4 &1273229949 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4952756192755158, guid: 85311974839d0df4fa1ba005c883b159,
@@ -690,19 +703,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 59a6d8fdacff6c64dbef14a8aae1a328, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 59a6d8fdacff6c64dbef14a8aae1a328, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 59a6d8fdacff6c64dbef14a8aae1a328, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 59a6d8fdacff6c64dbef14a8aae1a328, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 59a6d8fdacff6c64dbef14a8aae1a328, type: 3}
       propertyPath: m_RootOrder

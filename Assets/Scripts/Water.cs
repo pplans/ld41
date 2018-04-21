@@ -84,8 +84,6 @@ public class Water : MonoBehaviour
 		outwnormal.y = Mathf.Abs(outwnormal.y);
 		outwpos.y = 0.33f * (p1.y + p2.y + p3.y);
 
-		Debug.DrawLine(outwpos, outwpos+outwnormal * 400.0f, Color.green);
-
 		/*outwpos = wpos;
 		outwpos.y = getHeightAtPoint(new Vector3(wpos.x, wpos.z), out outwnormal);*/
 	}

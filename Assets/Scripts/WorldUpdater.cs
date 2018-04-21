@@ -11,8 +11,13 @@ public class WorldUpdater : MonoBehaviour {
 
     public float boatRotationSpeed = 150.0f;
 
-	// Use this for initialization
-	void Start () {
+    public float stickyUpRate = 30.0f;
+    public float stickyDownRate = 9.8f;
+    public float stickyTiltRate = 9.8f;
+    public float stickyOffset = -0.05f;
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 
@@ -36,25 +41,29 @@ public class WorldUpdater : MonoBehaviour {
         Vector3 pos;
         Vector3 normal;
 
-        // Player Boat
-        sea.GetSurfacePosAndNormalForWPos(playerBoat.transform.position, out pos, out normal);
-        playerBoat.transform.position = pos;
-		playerBoat.transform.rotation = Quaternion.LookRotation(normal, Vector3.forward);
+        List<GameObject> objects = new List<GameObject>();
+        objects.Add(playerBoat);
+        objects.Add(buoy);
 
-		Debug.DrawLine(pos, pos + playerBoat.transform.rotation * Vector3.forward * 40.0f, Color.red);
-		Debug.DrawLine(pos, pos + playerBoat.transform.rotation * Vector3.up * 40.0f, Color.green);
-		Debug.DrawLine(pos, pos + playerBoat.transform.rotation * Vector3.right * 40.0f, Color.blue);
+        Quaternion fixQuaternion = Quaternion.Euler(90, 0, 0) * Quaternion.Euler(0, 180, 0);
 
-		// Buoy
-		sea.GetSurfacePosAndNormalForWPos(buoy.transform.position, out pos, out normal);
-        buoy.transform.position = pos;
-		buoy.transform.rotation = Quaternion.LookRotation(normal, Vector3.forward);
-		//buoy.transform.LookAt(pos+Vector3.up, normal.normalized);
+        foreach (var go in objects)
+        {
+            sea.GetSurfacePosAndNormalForWPos(go.transform.position, out pos, out normal);
+            pos.y += stickyOffset;
+            if (go.transform.position.y > pos.y)
+            {
+                go.transform.position = Vector3.Lerp(pos, go.transform.position, Mathf.Pow(2.0f, -stickyDownRate * Time.deltaTime));
+            }
+            else
+            {
+                go.transform.position = Vector3.Lerp(pos, go.transform.position, Mathf.Pow(2.0f, -stickyUpRate * Time.deltaTime));
+            }
 
-		Debug.DrawLine(pos, pos + buoy.transform.rotation * Vector3.forward * 40.0f, Color.red);
-		Debug.DrawLine(pos, pos + buoy.transform.rotation * Vector3.up * 40.0f, Color.green);
-		Debug.DrawLine(pos, pos + buoy.transform.rotation * Vector3.right * 40.0f, Color.blue);
-	}
+            Quaternion newQuaternion = Quaternion.LookRotation(normal, go.transform.rotation * Vector3.forward) * fixQuaternion;
+            go.transform.rotation = Quaternion.Lerp(newQuaternion, go.transform.rotation, Mathf.Pow(2.0f, -stickyTiltRate * Time.deltaTime));
+        }
+    }
 
     // Update is called once per frame
     void Update () {
