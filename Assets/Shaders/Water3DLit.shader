@@ -48,7 +48,7 @@
 			float2 uv = _BoatPosition.xy + _UVTiling * (IN.uv_DFFTex + (_Time.xx*speedBoat.xy*speedWind.xy));
 			fixed4 c = tex2D(_DFFTex, uv) * _Color;
 			o.Albedo = c.rgb;
-			o.Normal = tex2D(_NormTex, uv);
+			o.Normal = UnpackNormal(tex2D(_NormTex, uv));
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
