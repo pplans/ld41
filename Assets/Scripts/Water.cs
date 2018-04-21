@@ -32,4 +32,11 @@ public class Water : MonoBehaviour
 		time += Time.deltaTime;
 		//if (time > Mathf.PI * 2.0f) time = 0.0f;
 	}
+    
+    public void GetSurfacePosAndNormalForWPos(Vector3 wpos, out Vector3 outwpos, out Vector3 outwnormal)
+    {
+        outwnormal = Vector3.up;
+        outwpos = wpos;
+        outwpos.y = Mathf.Sin(WaterLib.sea_map(wpos, time, sea_choppy, sea_level, sea_speed, sea_freq));
+    }
 }

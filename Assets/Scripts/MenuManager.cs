@@ -139,6 +139,11 @@ public class MenuManager : MonoBehaviour
 		}
 	}
 
+    public GameState GetState()
+    {
+        return m_state;
+    }
+
 	void UpdateGame()
 	{
 		switch (m_state)
