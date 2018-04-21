@@ -2,8 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+class Vertex
+{
+	uint index;
+	Vector3 vertex;
+}
+
 public class Water : MonoBehaviour
 {
+	private MeshFilter m_meshFilter;
+	private MeshCollider m_meshCollider;
+	private Mesh m_mesh;
+	private MeshRenderer m_meshRenderer;
+	public Material m_material;
+
 	private float time;
 
 	public float sea_choppy = 4.0f;
@@ -11,10 +23,179 @@ public class Water : MonoBehaviour
 	public float sea_speed = 1.0f;
 	public float sea_freq = 0.1f;
 
+	private List<Vector3>	m_vertices;
+	private List<Vector3>	m_normals;
+	private List<int>		m_indices;
+
 	// Use this for initialization
 	void Start ()
 	{
+		Clear();
+		Generate(5, 1.0f, -1.0f);
+		//UpdateMesh();
+	}
 
+	void Clear()
+	{
+	}
+
+	void Generate(int width, float top, float bot)
+	{
+		m_meshFilter = GetComponent<MeshFilter>();
+		m_meshRenderer = GetComponent<MeshRenderer>();
+		m_meshCollider = GetComponent<MeshCollider>();
+		if (m_meshFilter == null)
+		{
+			m_mesh = new Mesh();
+			m_mesh.name = "Custom Mesh";
+			m_meshFilter = gameObject.AddComponent<MeshFilter>();
+		}
+		else
+		{
+			m_mesh = m_meshFilter.sharedMesh;
+			m_mesh.name = "Custom Mesh";
+		}
+		if (m_meshCollider == null)
+		{
+			m_meshCollider = gameObject.AddComponent<MeshCollider>();
+		}
+		if (m_meshRenderer == null)
+		{
+			m_meshRenderer = gameObject.AddComponent<MeshRenderer>();
+			m_meshRenderer.material = m_material;
+		}
+
+		int amountData = width * width + width * width;
+		Vector3[] vertices = new Vector3[amountData];
+		int[] triangles;
+		Vector2[] uv = new Vector2[amountData];
+		int k = 0;
+		int botIndex = 0;
+		for (int j = 0; j < width; j++)
+			for (int i = 0; i < width; i++, k++)
+			{
+				vertices[k] = new Vector3(
+					(i - width * 0.5f) / (width*0.5f),
+					top,
+					(j - width * 0.5f) / (width*0.5f)
+				);
+				uv[k] = new Vector2(
+					(float)i / width,
+					(float)j / width
+					);
+				vertices[k+width*width] = new Vector3(
+					(i - width * 0.5f) / (width * 0.5f),
+					bot,
+					(j - width * 0.5f) / (width * 0.5f)
+				);
+				uv[k+width*width] = new Vector2(
+					(float)i / width,
+					(float)j / width
+					);
+			}
+		m_mesh.vertices = vertices;
+		int nbFaces = (width - 1) * (width - 1);
+		triangles = new int[(nbFaces+nbFaces+4*width) * 6];
+		int t = 0;
+		for (int face = 0; face < nbFaces; face++)
+		{
+			// Retrieve lower left corner from face ind
+			int i = face % (width - 1) + (face / (width - 1) * width);
+
+			triangles[t++] = i + width;
+			triangles[t++] = i + 1;
+			triangles[t++] = i;
+
+			triangles[t++] = i + width;
+			triangles[t++] = i + width + 1;
+			triangles[t++] = i + 1;
+		}
+
+		for (int face = 0; face < nbFaces; face++)
+		{
+			// Retrieve lower left corner from face ind
+			int i = width*width+(face % (width - 1) + (face / (width - 1) * width));
+			
+			triangles[t++] = i;
+			triangles[t++] = i + 1;
+			triangles[t++] = i + width;
+
+			triangles[t++] = i + 1;
+			triangles[t++] = i + width + 1;
+			triangles[t++] = i + width;
+		}
+
+		int secondsideIndex = width * width;
+		// face side top
+		for (int face = 0; face < width-1; face++)
+		{
+			// Retrieve lower left corner from face ind
+			int i = face;
+
+			triangles[t++] = i;
+			triangles[t++] = i + 1;
+			triangles[t++] = i + secondsideIndex;
+
+			triangles[t++] = i + secondsideIndex;
+			triangles[t++] = i + 1;
+			triangles[t++] = i + secondsideIndex + 1;
+		}
+		// face side bot
+		for (int face = 0; face < width-1; face++)
+		{
+			// Retrieve lower left corner from face ind
+			int i = face+(width-1)*width;
+
+			triangles[t++] = i;
+			triangles[t++] = i + secondsideIndex;
+			triangles[t++] = i + 1;
+
+			triangles[t++] = i + secondsideIndex;
+			triangles[t++] = i + secondsideIndex + 1;
+			triangles[t++] = i + 1;
+		}
+		// face side left
+		for (int face = 0; face < width-1; face++)
+		{
+			// Retrieve lower left corner from face ind
+			int i = face * width;
+
+			triangles[t++] = i;
+			triangles[t++] = i + secondsideIndex;
+			triangles[t++] = i + width;
+
+			triangles[t++] = i + secondsideIndex;
+			triangles[t++] = i + width + secondsideIndex;
+			triangles[t++] = i + width;
+		}
+		// face side right
+		for (int face = 0; face < width-1; face++)
+		{
+			// Retrieve lower left corner from face ind
+			int i = face + ((face+1) * (width - 1));
+
+			triangles[t++] = i;
+			triangles[t++] = i + width;
+			triangles[t++] = i + secondsideIndex;
+
+			triangles[t++] = i + secondsideIndex;
+			triangles[t++] = i + width;
+			triangles[t++] = i + width + secondsideIndex;
+		}
+
+		m_mesh.uv = uv;
+		m_mesh.triangles = triangles;
+		m_mesh.RecalculateNormals();
+		GetComponent<MeshFilter>().mesh = m_mesh;
+	}
+
+	void UpdateMesh()
+	{
+		Mesh mesh = GetComponent<MeshFilter>().mesh;
+		mesh.vertices = m_vertices.ToArray();
+		mesh.normals = m_normals.ToArray();
+		mesh.SetIndices(m_indices.ToArray(), MeshTopology.Triangles, 0);
+		mesh.RecalculateBounds();
 	}
 
 	void Update()
@@ -22,7 +203,7 @@ public class Water : MonoBehaviour
 		Mesh mesh = GetComponent<MeshFilter>().mesh;
 		Vector3[] vertices = mesh.vertices;
 		int i = 0;
-		while (i < vertices.Length)
+		while (i < vertices.Length/2)
 		{
 			vertices[i].y = WaterLib.sea_map(vertices[i], time, sea_choppy, sea_level, sea_speed, sea_freq);
 			i++;
