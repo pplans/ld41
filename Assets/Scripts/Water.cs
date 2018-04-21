@@ -32,4 +32,29 @@ public class Water : MonoBehaviour
 		time += Time.deltaTime;
 		//if (time > Mathf.PI * 2.0f) time = 0.0f;
 	}
+
+	float getHeightAtPoint(Vector2 p)
+	{
+		Mesh mesh = GetComponent<MeshFilter>().mesh;
+		Vector3[] vertices = mesh.vertices;
+		int i = 0;
+		Vector3[] nearestPoints = new Vector3[3];
+		for(int k = 0;k < 3; ++k) nearestPoints[k] = new Vector3(100000.0f, 10000.0f, 10000.0f);
+		while (i < vertices.Length)
+		{
+			Vector3 pv = vertices[i];
+			for(int j = 0;j < 3; ++j)
+			{
+				if (((new Vector2(pv.x, pv.y)) - p).magnitude < ((new Vector2(nearestPoints[j].x, nearestPoints[j].y)) - p).magnitude)
+				{
+					nearestPoints[j] = pv;
+				}
+			}
+			++i;
+		}
+
+		float height = 0.0f;
+		for (int k = 0; k < 3; ++k) height+=nearestPoints[k].y*0.33f;
+		return height;
+	}
 }
