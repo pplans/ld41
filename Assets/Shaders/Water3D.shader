@@ -53,7 +53,7 @@
 				// sample the texture
 				float2 speedBoat = max(0.001, _SpeedBoatWind.xy);
 				float2 speedWind = max(0.001, _SpeedBoatWind.zw);
-				fixed4 col = tex2D(_MainTex, _UVTiling*(i.uv+(_Time.xy*speedBoat.xy*speedWind.xy)));
+				fixed4 col = tex2D(_MainTex, _UVTiling*(i.uv+(_Time.xx*speedBoat.xy*speedWind.xy)));
 				// apply fog
 				UNITY_APPLY_FOG(i.fogCoord, col);
 				return col;
