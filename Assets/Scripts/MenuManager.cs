@@ -77,9 +77,6 @@ public class MenuManager : MonoBehaviour
 		END
 	};
 
-	public GameObject m_menu;
-
-
 	private GameState m_state;
 	public GameObject m_UIMain;
 	public GameObject m_UIGameOver;
@@ -100,14 +97,13 @@ public class MenuManager : MonoBehaviour
 	public void InitGame()
 	{
 		m_state = GameState.MENU;
-		m_CameraGame.tag = "Untagged";
 		m_CameraUI.tag = "MainCamera";
+		m_CameraGame.tag = "Untagged";
 		m_CameraUI.SetActive(true);
 		m_CameraGame.SetActive(false);
 
 		m_UIGameOver.SetActive(false);
 		m_UIMain.SetActive(true);
-		m_menu.SetActive(true);
 	}
 
 	public void StartGame()
@@ -124,10 +120,6 @@ public class MenuManager : MonoBehaviour
 			// start the game here
 			Debug.Log("StartGame");
 			m_state = GameState.PLAYING;
-			if(m_menu)
-			{
-				m_menu.SetActive(false);
-			}
 		}
 	}
 
@@ -136,8 +128,8 @@ public class MenuManager : MonoBehaviour
 		if (m_state == GameState.PLAYING)
 		{
 			m_state = GameState.END;
-			m_CameraGame.tag = "Untagged";
 			m_CameraUI.tag = "MainCamera";
+			m_CameraGame.tag = "Untagged";
 			m_CameraUI.SetActive(true);
 			m_CameraGame.SetActive(false);
 
