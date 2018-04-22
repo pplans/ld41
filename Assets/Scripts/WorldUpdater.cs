@@ -13,6 +13,10 @@ public class WorldUpdater : MonoBehaviour {
 	public Text UINumBuoys = null;
 	public Text UITimer = null;
 	public float TimerAtTheStart = 60.0f;
+    public float ExtraTimeForSmallFish = 2.0f;
+
+    public float BuoyCatchSqrRange = 1.0f;
+    public float FishCatchSqrRange = 1.0f;
 
     public Object buoyPrefab;
     public Object smallFishPrefab;
@@ -113,7 +117,21 @@ public class WorldUpdater : MonoBehaviour {
 			newObject.transform.position = path.Get((float)i / NumberOfSteps);
 			buoys.Add(new Buoy(i, newObject));
 		}
-	}
+
+        // Generate some fishes
+        BezierCurve path2 = new BezierCurve();
+        path.P1 = StartRun;
+        path.P3 = EndRun;
+        path.P2 = StartRun + 0.5f * (EndRun - StartRun) + Vector3.Cross((EndRun - StartRun).normalized, Vector3.up) * 4.0f;
+        fishs = new List<Fish>();
+        for (int i = 0; i < NumberOfSteps; i++)
+        {
+            GameObject newObject = Instantiate(smallFishPrefab) as GameObject;
+            Vector3 newObjectPos = Random.onUnitSphere * 5;
+            newObject.transform.position = path.Get((float)i / NumberOfSteps) + newObjectPos;
+            fishs.Add(new Fish(Fish.Type.SMALL, newObject));
+        }
+    }
 
     // Update player, returns the sea offset
     Vector3 UpdatePlayer()
@@ -151,6 +169,10 @@ public class WorldUpdater : MonoBehaviour {
         foreach (var b in buoys)
             objects.Add(b.go);
 
+        if (fishs != null)
+            foreach (var b in fishs)
+                objects.Add(b.go);
+
         Quaternion fixQuaternion = Quaternion.Euler(90, 0, 0) * Quaternion.Euler(0, 180, 0);
 
         foreach (var go in objects)
@@ -180,6 +202,10 @@ public class WorldUpdater : MonoBehaviour {
         if(buoys!=null)
         foreach (var b in buoys)
             b.go.transform.position -= deltaPlayerPos;
+
+        if (fishs != null)
+            foreach (var f in fishs)
+                f.go.transform.position -= deltaPlayerPos;
     }
 
     bool IsInsideSea(Vector3 pos)
@@ -193,6 +219,10 @@ public class WorldUpdater : MonoBehaviour {
         foreach (Buoy b in buoys)
             foreach (var comp in b.go.GetComponentsInChildren<Renderer>())
                 comp.enabled = IsInsideSea(b.go.transform.position);
+
+        foreach (Fish f in fishs)
+            foreach (var comp in f.go.GetComponentsInChildren<Renderer>())
+                comp.enabled = IsInsideSea(f.go.transform.position);
     }
 
     // Update is called once per frame
@@ -215,11 +245,28 @@ public class WorldUpdater : MonoBehaviour {
 		}
 		if(TimerSecondsLeft>0.0f)
 		{
-			// Next Buoy
-			if ((CurrentBuoy + 1) < buoys.Count)
+            // Catch fish
+            List<Fish> fishesToDelete = new List<Fish>();
+            foreach (Fish f in fishs)
+            {
+                if ((playerBoat.transform.position - f.go.transform.position).sqrMagnitude < FishCatchSqrRange)
+                {
+                    TimerSecondsLeft += ExtraTimeForSmallFish;
+                    // TODO : juice it up, display some FX
+                    fishesToDelete.Add(f);
+                }
+            }
+            foreach (Fish f in fishesToDelete)
+            {
+                DestroyObject(f.go);
+                fishs.Remove(f);
+            }
+
+            // Next Buoy
+            if ((CurrentBuoy + 1) < buoys.Count)
 			{
 				Buoy buoy = buoys[CurrentBuoy + 1];
-				if ((playerBoat.transform.position - buoy.go.transform.position).sqrMagnitude < 1.0f)
+				if ((playerBoat.transform.position - buoy.go.transform.position).sqrMagnitude < BuoyCatchSqrRange)
 				{
 					CurrentBuoy = (CurrentBuoy + 1) < NumberOfSteps ? CurrentBuoy + 1 : CurrentBuoy;
 					TimerSecondsLeft += 10.0f;
