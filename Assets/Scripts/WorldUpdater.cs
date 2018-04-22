@@ -81,9 +81,17 @@ public class WorldUpdater : MonoBehaviour {
 		public Vector3 P1;
 		public Vector3 P2;
 		public Vector3 P3;
-		public Vector3 Get(float t)
+		public Vector3 P4;
+		public Vector3 Get2(float t)
 		{
 			return (1.0f - t) * (1.0f - t) * P1 + 2.0f * (1.0f - t) * t * P2 + t * t * P3;
+		}
+		public Vector3 Get3(float t)
+		{
+			return (1.0f - t) * (1.0f - t) * (1.0f -t) * P1
+			+ 3.0f * (1.0f - t) * (1.0f - t) * t * P2
+			+ 3.0f * (1.0f - t) * (1.0f - t) * t * P3
+			+ t * t * t * P4;
 		}
 	}
 
@@ -108,16 +116,19 @@ public class WorldUpdater : MonoBehaviour {
 		// Generate some buoys
 		BezierCurve path = new BezierCurve();
 		float randomAngle = Random.Range(-3.14f, 3.14f);
-		path.P1 = playerBoat.transform.position;
-		path.P3 = MenuManager.instance.TrialLength*(new Vector3(Mathf.Cos(randomAngle), 0.0f, Mathf.Sin(randomAngle)));
-		path.P2 = StartRun + 0.5f * (EndRun - StartRun) + Vector3.Cross((EndRun - StartRun).normalized, Vector3.up)
+		path.P1 = playerBoat.transform.position+ (new Vector3(Mathf.Cos(Random.Range(-3.14f, 3.14f)), 0.0f, Mathf.Sin(Random.Range(-3.14f, 3.14f))))*5.0f;
+		path.P4 = MenuManager.instance.TrialLength*(new Vector3(Mathf.Cos(randomAngle), 0.0f, Mathf.Sin(randomAngle)));
+		Vector3 perp = Vector3.Cross((path.P4 - path.P1).normalized, Vector3.up);
+		path.P2 = path.P1 + 0.5f * (path.P4 - path.P1) + perp
+		* Random.Range(MenuManager.instance.TrialMinOffsetLength, MenuManager.instance.MaxBuoyNumber);
+		path.P3 = path.P1 + 0.5f * (path.P4 - path.P1) - perp
 		* Random.Range(MenuManager.instance.TrialMinOffsetLength, MenuManager.instance.MaxBuoyNumber);
 
 		for (int i = 0; i < NumberOfSteps; i++)
 		{
 			GameObject newObject = Instantiate(buoyPrefab) as GameObject;
 			Vector3 newObjectPos = Random.onUnitSphere * 100;
-			newObject.transform.position = path.Get((float)i / NumberOfSteps);
+			newObject.transform.position = path.Get3((float)i / NumberOfSteps);
 			buoys.Add(new Buoy(i, newObject));
 		}
 
@@ -142,6 +153,7 @@ public class WorldUpdater : MonoBehaviour {
 
             Vector3 newObjectPos = Random.onUnitSphere * 5;
             newObject.transform.position = newObjectPos;
+            //newObject.transform.position = path.Get2((float)i / NumberOfSteps) + newObjectPos;
 
             fishs.Add(new Fish((Fish.Type)type, newObject));
         }
