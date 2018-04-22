@@ -70,7 +70,6 @@ public class Water : MonoBehaviour
 		int[] triangles;
 		Vector2[] uv = new Vector2[amountData];
 		int k = 0;
-		int botIndex = 0;
 		for (int j = 0; j < width; j++)
 			for (int i = 0; i < width; i++, k++)
 			{
