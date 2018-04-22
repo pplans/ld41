@@ -21,7 +21,12 @@ ModelImporter:
     7400000: Default Take
     9500000: //RootNode
     13700000: Buoy
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: 0621d83e6d6c7cc40ab65d7b4a9ce545, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
