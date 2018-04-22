@@ -12,8 +12,6 @@ public class WorldUpdater : MonoBehaviour {
 	public Text UIScoreValue = null;
 	public Text UINumBuoys = null;
 	public Text UITimer = null;
-	public float TimerAtTheStart = 60.0f;
-    public float ExtraTimeForSmallFish = 2.0f;
 
     public float BuoyCatchSqrRange = 1.0f;
     public float FishCatchSqrRange = 1.0f;
@@ -34,10 +32,13 @@ public class WorldUpdater : MonoBehaviour {
 
     public float seaWidth = 12.0f; // supposed to be 10 but we had a margin
 
+	// path
 	public Vector3	StartRun;
 	public Vector3	EndRun;
 	public uint		NumberOfSteps; // buoys
 
+	// Timer
+	public float TimerAtTheStart = 60.0f;
 	private float TimerSecondsLeft;
 
 	class Buoy
@@ -93,7 +94,7 @@ public class WorldUpdater : MonoBehaviour {
 	void Generate()
 	{
 		CurrentBuoy = -1;
-		NumberOfSteps = (uint)Random.Range(2.0f, 4.0f);
+		NumberOfSteps = (uint)Random.Range(MenuManager.instance.MinBuoyNumber, MenuManager.instance.MaxBuoyNumber);
 		if(buoys!=null)
 		foreach(Buoy b in buoys)
 		{
@@ -105,10 +106,9 @@ public class WorldUpdater : MonoBehaviour {
 		BezierCurve path = new BezierCurve();
 		float randomAngle = Random.Range(-3.14f, 3.14f);
 		path.P1 = playerBoat.transform.position;
-		path.P3 = 1000.0f*(new Vector3(Mathf.Cos(randomAngle), 0.0f, Mathf.Sin(randomAngle)));
-
-		path.P2 = StartRun + 0.5f * (EndRun - StartRun) + Vector3.Cross((EndRun - StartRun).normalized, Vector3.up) * Random.Range(10.00f, 100.0f);
-
+		path.P3 = MenuManager.instance.TrialLength*(new Vector3(Mathf.Cos(randomAngle), 0.0f, Mathf.Sin(randomAngle)));
+		path.P2 = StartRun + 0.5f * (EndRun - StartRun) + Vector3.Cross((EndRun - StartRun).normalized, Vector3.up)
+		* Random.Range(MenuManager.instance.TrialMinOffsetLength, MenuManager.instance.MaxBuoyNumber);
 
 		for (int i = 0; i < NumberOfSteps; i++)
 		{
@@ -251,7 +251,7 @@ public class WorldUpdater : MonoBehaviour {
             {
                 if ((playerBoat.transform.position - f.go.transform.position).sqrMagnitude < FishCatchSqrRange)
                 {
-                    TimerSecondsLeft += ExtraTimeForSmallFish;
+                    TimerSecondsLeft += MenuManager.instance.BonusTimeFish;
                     // TODO : juice it up, display some FX
                     fishesToDelete.Add(f);
                 }
@@ -269,7 +269,7 @@ public class WorldUpdater : MonoBehaviour {
 				if ((playerBoat.transform.position - buoy.go.transform.position).sqrMagnitude < BuoyCatchSqrRange)
 				{
 					CurrentBuoy = (CurrentBuoy + 1) < NumberOfSteps ? CurrentBuoy + 1 : CurrentBuoy;
-					TimerSecondsLeft += 10.0f;
+					TimerSecondsLeft += MenuManager.instance.BonusTimeBuoy;
 				}
 			}
 			// DrawHelp

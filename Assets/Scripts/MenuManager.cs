@@ -84,6 +84,21 @@ public class MenuManager : MonoBehaviour
 	public GameObject m_CameraUI;
 	private float m_score;
 
+	public float m_trialLength = 1000.0f;
+	public float TrialLength { get { return m_trialLength; } set { } }
+	public float m_trialMinOffsetLength = 10.0f;
+	public float TrialMinOffsetLength { get { return m_trialMinOffsetLength; } set { } }
+	public float m_trialMaxOffsetLength = 100.0f;
+	public float TrialMaxOffsetLength { get { return m_trialMaxOffsetLength; } set { } }
+	public float m_bonusTimeBuoy = 10.0f;
+	public float BonusTimeBuoy { get { return m_bonusTimeBuoy; } set { } }
+	public float m_bonusTimeFish = 2.0f;
+	public float BonusTimeFish { get { return m_bonusTimeFish; } set { } }
+	public uint m_minBuoyNumber = 2;
+	public float MinBuoyNumber { get { return m_minBuoyNumber; } set { } }
+	public uint m_maxBuoyNumber = 10;
+	public float MaxBuoyNumber { get { return m_maxBuoyNumber; } set { } }
+
 	void Awake()
 	{
 		if (instance == null)
