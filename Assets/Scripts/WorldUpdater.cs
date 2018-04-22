@@ -107,6 +107,7 @@ public class WorldUpdater : MonoBehaviour {
         path.P1 = StartRun;
         path.P3 = EndRun;
         path.P2 = StartRun + 0.5f * (EndRun - StartRun) + Vector3.Cross((EndRun - StartRun).normalized, Vector3.up) * 4.0f;
+        fishs = new List<Fish>();
         for (int i = 0; i < NumberOfSteps; i++)
         {
             GameObject newObject = Instantiate(smallFishPrefab) as GameObject;
