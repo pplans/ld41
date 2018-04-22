@@ -14,6 +14,7 @@ ModelImporter:
     400004: Buoy
     400006: //RootNode
     2100000: Material
+    2100002: Material__Tex
     4300000: Buoy
     7400000: Default Take
     7400002: Idle
