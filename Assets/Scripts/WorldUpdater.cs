@@ -11,6 +11,8 @@ public class WorldUpdater : MonoBehaviour {
 	public GameObject BuoyHelper = null;
 	public Text UIScoreValue = null;
 	public Text UINumBuoys = null;
+	public Text UITimer = null;
+	public float TimerAtTheStart = 60.0f;
 
     public Object buoyPrefab;
 
@@ -30,6 +32,8 @@ public class WorldUpdater : MonoBehaviour {
 	public Vector3	StartRun;
 	public Vector3	EndRun;
 	public uint		NumberOfSteps; // buoys
+
+	private float TimerSecondsLeft;
 
 	class Buoy
 	{
@@ -58,7 +62,8 @@ public class WorldUpdater : MonoBehaviour {
     // Use this for initialization
     void Start () {
         boatCurrentSpeed = 0.0f;
-        buoys = new List<Buoy>();
+		TimerSecondsLeft = TimerAtTheStart;
+		buoys = new List<Buoy>();
 
 		// Generate some buoys
 		BezierCurve path = new BezierCurve();
@@ -164,35 +169,51 @@ public class WorldUpdater : MonoBehaviour {
         MoveEverythingWithPlayer(playerOffset);
         StickEverythingToSea();
 
-		// Next Buoy
-		if ((CurrentBuoy + 1) < buoys.Count)
+		if(TimerSecondsLeft>0.0f)
 		{
-			Buoy buoy = buoys[CurrentBuoy + 1];
-			if ((playerBoat.transform.position - buoy.go.transform.position).sqrMagnitude < 1.0f)
+			// Next Buoy
+			if ((CurrentBuoy + 1) < buoys.Count)
 			{
-				CurrentBuoy = (CurrentBuoy + 1) < NumberOfSteps ? CurrentBuoy + 1 : CurrentBuoy;
+				Buoy buoy = buoys[CurrentBuoy + 1];
+				if ((playerBoat.transform.position - buoy.go.transform.position).sqrMagnitude < 1.0f)
+				{
+					CurrentBuoy = (CurrentBuoy + 1) < NumberOfSteps ? CurrentBuoy + 1 : CurrentBuoy;
+				}
 			}
-		}
-		// DrawHelp
-		if ((CurrentBuoy+1)<buoys.Count)
-		{
-			Buoy buoy = buoys[CurrentBuoy + 1];
-			if (BuoyHelper != null)
+			// DrawHelp
+			if ((CurrentBuoy + 1) < buoys.Count)
 			{
-				BuoyHelper.transform.LookAt(buoy.go.transform);
+				Buoy buoy = buoys[CurrentBuoy + 1];
+				if (BuoyHelper != null)
+				{
+					BuoyHelper.transform.LookAt(buoy.go.transform);
+				}
+			}
+
+			// Updating timer until the end
+			if ((CurrentBuoy + 1) < NumberOfSteps)
+			{
+				TimerSecondsLeft -= Time.deltaTime;
 			}
 		}
 
-		// scoring
-		if(UIScoreValue!=null)
+		// UI
+		if (UIScoreValue!=null)
 		{
-			UIScoreValue.text = Random.Range(0.0f, 10000.0f).ToString();
+			float score = CurrentBuoy * 100.0f - (TimerAtTheStart - TimerSecondsLeft) * 10.0f;
+			UIScoreValue.text = score.ToString();
 		}
 
 		if (UINumBuoys != null)
 		{
 			UINumBuoys.text = (CurrentBuoy+1)+"/"+NumberOfSteps;
 		}
+
+		if (UITimer != null)
+		{
+			UITimer.text = TimerSecondsLeft.ToString("F2")+"s";
+		}
+
 
 		ClipEverythingOutsideSea();
 	}
