@@ -172,13 +172,17 @@ public class WorldUpdater : MonoBehaviour {
     // Update player, returns the sea offset
     Vector3 UpdatePlayer()
     {
+        float direction = 0.0f;
+
         if (UnityEngine.Input.GetKey(KeyCode.LeftArrow))
         {
             playerBoat.transform.Rotate(Vector3.down * boatRotationSpeed * Time.deltaTime);
+            direction -= 2.0f;
         }
         if (UnityEngine.Input.GetKey(KeyCode.RightArrow))
         {
             playerBoat.transform.Rotate(Vector3.up * boatRotationSpeed * Time.deltaTime);
+            direction += 2.0f;
         }
 
         if (UnityEngine.Input.GetKey(KeyCode.UpArrow))
@@ -196,8 +200,11 @@ public class WorldUpdater : MonoBehaviour {
 			main.startLifetimeMultiplier = 2.0f*boatCurrentSpeed;
 		}
 
+        Animator boatAnimator = playerBoat.GetComponent<Animator>();
+        boatAnimator.SetFloat("Direction", direction);
+        boatAnimator.SetFloat("Speed", boatCurrentSpeed);
 
-		return (playerBoat.transform.rotation * Vector3.forward) * boatCurrentSpeed;
+        return (playerBoat.transform.rotation * Vector3.forward) * boatCurrentSpeed;
     }
 
     void StickEverythingToSea()
