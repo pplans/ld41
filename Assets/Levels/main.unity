@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -113,6 +113,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &40308810 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1690761379769798, guid: d57f4e8a6f6e82542b1faa951395ca25,
+    type: 2}
+  m_PrefabInternal: {fileID: 598623238}
 --- !u!1 &49602752
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,6 +320,58 @@ MonoBehaviour:
   m_menu: {fileID: 727232917}
   m_UI: {fileID: 1736493110}
   m_3D: {fileID: 2128118415}
+--- !u!1001 &598623238
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 23842415611423646, guid: d57f4e8a6f6e82542b1faa951395ca25,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 96d322cdcd76f674a86343d789d841ab, type: 2}
+    - target: {fileID: 23847929174234524, guid: d57f4e8a6f6e82542b1faa951395ca25,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 96d322cdcd76f674a86343d789d841ab, type: 2}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &727232917
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,6 +703,7 @@ MonoBehaviour:
   playerBoat: {fileID: 1304557148}
   menu: {fileID: 558314604}
   sea: {fileID: 1982695108}
+  BuoyHelper: {fileID: 40308810}
   buoyPrefab: {fileID: 100000, guid: 59a6d8fdacff6c64dbef14a8aae1a328, type: 3}
   boatRotationSpeed: 150
   boatAcceleration: 2
@@ -656,6 +714,9 @@ MonoBehaviour:
   stickyTiltRate: 9.8
   stickyOffset: -0.05
   seaWidth: 12
+  StartRun: {x: 0, y: 0, z: 0}
+  EndRun: {x: 100, y: 0, z: 100}
+  NumberOfSteps: 10
 --- !u!1 &1304557148 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: 8fa821c2cfa979b4cb306c3ac5cd1776, type: 3}

@@ -35,9 +35,17 @@ Shader "Custom/ClippedStandard" {
 				};
                
 				v2f vert (appdata v) {
+					float4 vertex = UnityObjectToClipPos(v.vertex);
+					float2 corner = float2(_SeaWidth / 2, _SeaWidth / 2);
+					corner = min(corner - vertex.xz, corner + vertex.xz);
+					if (corner.x<0.0f || corner.y<0.0f)
+					{
+						vertex.xz = corner.xy;
+					}
 					v2f o;
-					o.vertex = UnityObjectToClipPos(v.vertex);
-					o.worldPos = mul(v.vertex,unity_ObjectToWorld);
+					o.vertex = vertex;
+					o.worldPos = mul(vertex, unity_ObjectToWorld);
+					//clip (min(corner - IN.vertex.xz, corner + IN.vertex.xz));
 					return o;
 				}
                
