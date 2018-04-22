@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WorldUpdater : MonoBehaviour {
 
@@ -8,6 +9,8 @@ public class WorldUpdater : MonoBehaviour {
     public MenuManager menu;
     public Water sea;
 	public GameObject BuoyHelper = null;
+	public Text UIScoreValue = null;
+	public Text UINumBuoys = null;
 
     public Object buoyPrefab;
 
@@ -103,6 +106,7 @@ public class WorldUpdater : MonoBehaviour {
         List<GameObject> objects = new List<GameObject>();
         objects.Add(playerBoat);
 
+		if(buoys!=null)
         foreach (var b in buoys)
             objects.Add(b.go);
 
@@ -161,21 +165,35 @@ public class WorldUpdater : MonoBehaviour {
         StickEverythingToSea();
 
 		// Next Buoy
-		Buoy buoy = buoys[CurrentBuoy + 1];
-		if((playerBoat.transform.position-buoy.go.transform.position).sqrMagnitude<1.0f)
+		if ((CurrentBuoy + 1) < buoys.Count)
 		{
-			CurrentBuoy = CurrentBuoy + 1 >= NumberOfSteps ? CurrentBuoy : CurrentBuoy + 1;
+			Buoy buoy = buoys[CurrentBuoy + 1];
+			if ((playerBoat.transform.position - buoy.go.transform.position).sqrMagnitude < 1.0f)
+			{
+				CurrentBuoy = (CurrentBuoy + 1) < NumberOfSteps ? CurrentBuoy + 1 : CurrentBuoy;
+			}
 		}
 		// DrawHelp
-		if(CurrentBuoy<NumberOfSteps)
+		if ((CurrentBuoy+1)<buoys.Count)
 		{
-			buoy = buoys[CurrentBuoy + 1];
-			if(BuoyHelper!=null)
+			Buoy buoy = buoys[CurrentBuoy + 1];
+			if (BuoyHelper != null)
 			{
 				BuoyHelper.transform.LookAt(buoy.go.transform);
 			}
 		}
 
-        ClipEverythingOutsideSea();
+		// scoring
+		if(UIScoreValue!=null)
+		{
+			UIScoreValue.text = Random.Range(0.0f, 10000.0f).ToString();
+		}
+
+		if (UINumBuoys != null)
+		{
+			UINumBuoys.text = (CurrentBuoy+1)+"/"+NumberOfSteps;
+		}
+
+		ClipEverythingOutsideSea();
 	}
 }
