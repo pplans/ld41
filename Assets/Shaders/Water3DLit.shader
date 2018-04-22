@@ -1,6 +1,7 @@
 ﻿Shader "3D/Water3DLit" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
+    _SideColor ("SideColor", Color) = (1,1,1,1)
 		_DFFTex ("Albedo (RGB)", 2D) = "white" {}
 		_NormTex("Normal", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
@@ -36,6 +37,7 @@
 		half _Glossiness;
 		half _Metallic;
 		fixed4 _Color;
+    fixed4 _SideColor;
 		float4 _SpeedBoatWind;
     float4 _BoatPosition;
 		float _UVTiling;
@@ -78,7 +80,7 @@
 			// Albedo comes from a texture tinted by color
 			fixed4 c = _Color;
 			float3 normal = IN.N;
-			//if (dot(IN.N, float3(0.0, 1.0, 0.0)) > 0.2)
+      if (IN.uv_DFFTex.x > 0.0 && IN.uv_DFFTex.x < 1.0 && IN.uv_DFFTex.y > 0.0 && IN.uv_DFFTex.y < 1.0)
 			{
 				float2 speedBoat = max(float2(0.001, 0.001), _SpeedBoatWind.xy);
 				float2 speedWind = max(float2(0.001, 0.001), _SpeedBoatWind.zw);
@@ -88,6 +90,12 @@
 				o.Metallic = _Metallic;
 				o.Smoothness = _Glossiness;
 			}
+      else
+      {
+        c = _SideColor;
+        o.Metallic = 0.f;
+        o.Smoothness = 0.f;
+      }
 
 			/*Unity_GlossyEnvironmentData envData;
 			envData.roughness = 1 - 0.0f;

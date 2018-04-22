@@ -98,8 +98,8 @@ public class Water : MonoBehaviour
 				);
 				normals[k] = Vector3.up;
 				uv[k] = new Vector2(
-					(float)i / width,
-					(float)j / width
+					(float)i / (width-1),
+					(float)j / (width-1)
 					);
 				vertices[k+width*width] = new Vector3(
 					(i - (width - 1) * 0.5f) / ((width - 1) * 0.5f),
@@ -107,12 +107,16 @@ public class Water : MonoBehaviour
 					(j - (width - 1) * 0.5f) / ((width - 1) * 0.5f)
 				);
 				normals[k + width * width] = -Vector3.up;
-				uv[k+width*width] = new Vector2(
-					(float)i / width,
-					(float)j / width
+                uv[k+width*width] = new Vector2(
+					-1.0f + 3.0f * ((float)i / (width-1)),
+                    -1.0f + 3.0f * ((float)j / (width-1))
 					);
-			}
-		m_mesh.vertices = vertices;
+                //uv[k+width*width] = new Vector2( // old water
+                //    (float)i / (width - 1),
+                //    (float)j / (width - 1)
+                //);
+            }
+        m_mesh.vertices = vertices;
 		int nbFaces = (width - 1) * (width - 1);
 		triangles = new int[(nbFaces+nbFaces+4*width) * 6];
 		int t = 0;
