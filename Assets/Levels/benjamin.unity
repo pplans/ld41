@@ -207,6 +207,53 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 5
+--- !u!1 &85309497 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1690761379769798, guid: d57f4e8a6f6e82542b1faa951395ca25,
+    type: 2}
+  m_PrefabInternal: {fileID: 97519805}
+--- !u!1001 &97519805
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682056409049482, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &377381455
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,6 +717,7 @@ MonoBehaviour:
   playerBoat: {fileID: 1922333288}
   menu: {fileID: 558314604}
   sea: {fileID: 1273229950}
+  BuoyHelper: {fileID: 85309497}
   buoyPrefab: {fileID: 100000, guid: 59a6d8fdacff6c64dbef14a8aae1a328, type: 3}
   boatRotationSpeed: 200
   boatAcceleration: 1
@@ -680,6 +728,9 @@ MonoBehaviour:
   stickyTiltRate: 9.8
   stickyOffset: -0.05
   seaWidth: 12
+  StartRun: {x: 0, y: 0, z: 3}
+  EndRun: {x: 100, y: 0, z: 100}
+  NumberOfSteps: 10
 --- !u!4 &1273229949 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4952756192755158, guid: 85311974839d0df4fa1ba005c883b159,
