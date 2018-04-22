@@ -21,8 +21,10 @@ public class WorldUpdater : MonoBehaviour {
     public Object smallFishPrefab;
     public Object mediumFishPrefab;
     public Object bigFishPrefab;
+	public Object aiPrefab;
 
-    public float boatRotationSpeed = 200.0f;
+
+	public float boatRotationSpeed = 200.0f;
     public float boatAcceleration = 2.0f;
     public float boatMaxSpeed = 0.5f;
     public float boatDrag = 1.0f;
@@ -76,6 +78,13 @@ public class WorldUpdater : MonoBehaviour {
     }
     private List<Fish> fishs;
 
+	class AI
+	{
+		public GameObject go;
+		public Vector3 direction;
+	}
+	private List<AI> ais = null;
+
     class BezierCurve
 	{
 		public Vector3 P1;
@@ -100,6 +109,7 @@ public class WorldUpdater : MonoBehaviour {
         boatCurrentSpeed = 0.0f;
 		TimerSecondsLeft = TimerAtTheStart;
 		Generate();
+		ais = new List<AI>();
 	}
 
 	void Generate()
@@ -206,7 +216,11 @@ public class WorldUpdater : MonoBehaviour {
             foreach (var b in fishs)
                 objects.Add(b.go);
 
-        Quaternion fixQuaternion = Quaternion.Euler(90, 0, 0) * Quaternion.Euler(0, 180, 0);
+		if (ais != null)
+			foreach (var b in fishs)
+				objects.Add(b.go);
+
+		Quaternion fixQuaternion = Quaternion.Euler(90, 0, 0) * Quaternion.Euler(0, 180, 0);
 
         foreach (var go in objects)
         {
@@ -267,6 +281,19 @@ public class WorldUpdater : MonoBehaviour {
 
         MoveEverythingWithPlayer(playerOffset);
         StickEverythingToSea();
+
+		if(ais.Count==0)
+		{
+			AI ai = new AI();
+			ai.go = Instantiate(aiPrefab) as GameObject;
+			ai.go.transform.position = playerBoat.transform.position;
+			ai.direction = Vector3.forward;
+			ais.Add(ai);
+		}
+		foreach(AI ai in ais)
+		{
+			ai.go.transform.position += ai.direction * Time.deltaTime * 5.0f;
+		}
 
 		if((CurrentBuoy+1)>=buoys.Count)
 		{

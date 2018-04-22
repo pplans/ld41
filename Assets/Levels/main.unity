@@ -8302,6 +8302,7 @@ MonoBehaviour:
     type: 2}
   bigFishPrefab: {fileID: 1312447925707696, guid: eed4cf51f521480479ec2c42c3be42e6,
     type: 2}
+  aiPrefab: {fileID: 1304557148}
   boatRotationSpeed: 150
   boatAcceleration: 2
   boatMaxSpeed: 0.5
