@@ -7,9 +7,9 @@ public class WorldUpdater : MonoBehaviour {
     public GameObject playerBoat;
     public MenuManager menu;
     public Water sea;
+	public GameObject BuoyHelper = null;
 
     public Object buoyPrefab;
-    private List<GameObject> instanciatedBuoys;
 
     public float boatRotationSpeed = 200.0f;
     public float boatAcceleration = 2.0f;
@@ -24,20 +24,51 @@ public class WorldUpdater : MonoBehaviour {
 
     public float seaWidth = 12.0f; // supposed to be 10 but we had a margin
 
+	public Vector3	StartRun;
+	public Vector3	EndRun;
+	public uint		NumberOfSteps; // buoys
+
+	class Buoy
+	{
+		public GameObject go;
+		public int id;
+		public Buoy(int _id, GameObject _go)
+		{
+			id = _id;
+			go = _go;
+		}
+	}
+	private List<Buoy> buoys;
+	private int CurrentBuoy = -1;
+
+	class BezierCurve
+	{
+		public Vector3 P1;
+		public Vector3 P2;
+		public Vector3 P3;
+		public Vector3 Get(float t)
+		{
+			return (1.0f - t) * (1.0f - t) * P1 + 2.0f * (1.0f - t) * t * P2 + t * t * P3;
+		}
+	}
+
     // Use this for initialization
     void Start () {
         boatCurrentSpeed = 0.0f;
-        instanciatedBuoys = new List<GameObject>();
+        buoys = new List<Buoy>();
 
-        // Generate some buoys
-        for (int i=0; i < 100; i++)
+		// Generate some buoys
+		BezierCurve path = new BezierCurve();
+		path.P1 = StartRun;
+		path.P3 = EndRun;
+		path.P2 = StartRun+0.5f*(EndRun - StartRun)+Vector3.Cross((EndRun-StartRun).normalized, Vector3.up)*4.0f;
+        for (int i=0; i < NumberOfSteps; i++)
         {
             GameObject newObject = Instantiate(buoyPrefab) as GameObject;
             Vector3 newObjectPos = Random.onUnitSphere * 100;
-            newObjectPos.y = 0.0f;
-            newObject.transform.position = newObjectPos;
-            instanciatedBuoys.Add(newObject);
-        }
+            newObject.transform.position = path.Get((float)i/NumberOfSteps);
+            buoys.Add(new Buoy(i, newObject));
+		}
     }
 
     // Update player, returns the sea offset
@@ -72,8 +103,8 @@ public class WorldUpdater : MonoBehaviour {
         List<GameObject> objects = new List<GameObject>();
         objects.Add(playerBoat);
 
-        foreach (var go in instanciatedBuoys)
-            objects.Add(go);
+        foreach (var b in buoys)
+            objects.Add(b.go);
 
         Quaternion fixQuaternion = Quaternion.Euler(90, 0, 0) * Quaternion.Euler(0, 180, 0);
 
@@ -100,9 +131,10 @@ public class WorldUpdater : MonoBehaviour {
         deltaPlayerPos.y = 0.0f;
 
         sea.Offset += deltaPlayerPos;
-        
-        foreach (var go in instanciatedBuoys)
-            go.transform.position -= deltaPlayerPos;
+
+        if(buoys!=null)
+        foreach (var b in buoys)
+            b.go.transform.position -= deltaPlayerPos;
     }
 
     bool IsInsideSea(Vector3 pos)
@@ -113,9 +145,9 @@ public class WorldUpdater : MonoBehaviour {
 
     void ClipEverythingOutsideSea()
     {
-        foreach (var go in instanciatedBuoys)
-            foreach (var comp in go.GetComponentsInChildren<Renderer>())
-                comp.enabled = IsInsideSea(go.transform.position);
+        foreach (Buoy b in buoys)
+            foreach (var comp in b.go.GetComponentsInChildren<Renderer>())
+                comp.enabled = IsInsideSea(b.go.transform.position);
     }
 
     // Update is called once per frame
@@ -127,6 +159,22 @@ public class WorldUpdater : MonoBehaviour {
 
         MoveEverythingWithPlayer(playerOffset);
         StickEverythingToSea();
+
+		// Next Buoy
+		Buoy buoy = buoys[CurrentBuoy + 1];
+		if((playerBoat.transform.position-buoy.go.transform.position).sqrMagnitude<1.0f)
+		{
+			CurrentBuoy = CurrentBuoy + 1 >= NumberOfSteps ? CurrentBuoy : CurrentBuoy + 1;
+		}
+		// DrawHelp
+		if(CurrentBuoy<NumberOfSteps)
+		{
+			buoy = buoys[CurrentBuoy + 1];
+			if(BuoyHelper!=null)
+			{
+				BuoyHelper.transform.LookAt(buoy.go.transform);
+			}
+		}
 
         ClipEverythingOutsideSea();
 	}

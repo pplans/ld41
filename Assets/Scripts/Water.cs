@@ -250,7 +250,7 @@ public class Water : MonoBehaviour
     
     public void GetSurfacePosAndNormalForWPos(Vector3 wpos, out Vector3 outwpos, out Vector3 outwnormal)
     {
-		float eps = 0.1f;
+		float eps = 0.05f;
 		Vector3 p1 = wpos+new Vector3(-eps, 0.0f, 0.00f);
 		Vector3 p2 = wpos + new Vector3(eps, 0.0f, 0.00f);
 		Vector3 p3 = wpos + new Vector3(0.0f, 0.0f, eps);
