@@ -122,10 +122,11 @@ public class WorldUpdater : MonoBehaviour {
 		}
 
         // Generate some fishes
-        BezierCurve path2 = new BezierCurve();
-        path.P1 = StartRun;
-        path.P3 = EndRun;
-        path.P2 = StartRun + 0.5f * (EndRun - StartRun) + Vector3.Cross((EndRun - StartRun).normalized, Vector3.up) * 4.0f;
+        if (fishs != null)
+        foreach (Fish f in fishs)
+        {
+                Destroy(f.go);
+        }
         fishs = new List<Fish>();
         for (int i = 0; i < NumberOfSteps; i++)
         {
@@ -140,7 +141,7 @@ public class WorldUpdater : MonoBehaviour {
                 newObject = Instantiate(bigFishPrefab) as GameObject;
 
             Vector3 newObjectPos = Random.onUnitSphere * 5;
-            newObject.transform.position = path.Get((float)i / NumberOfSteps) + newObjectPos;
+            newObject.transform.position = newObjectPos;
 
             fishs.Add(new Fish((Fish.Type)type, newObject));
         }
@@ -292,7 +293,9 @@ public class WorldUpdater : MonoBehaviour {
 					TimerSecondsLeft += MenuManager.instance.BonusTimeBuoy;
 					ParticleSystem ps = buoy.go.GetComponentInChildren<ParticleSystem>();
 					ps.Play();
-				}
+                    Animator animator = buoy.go.GetComponent<Animator>();
+                    animator.SetBool("Triggered", true);
+                }
 			}
 			// DrawHelp
 			if ((CurrentBuoy + 1) < buoys.Count)
