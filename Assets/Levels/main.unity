@@ -637,12 +637,12 @@ MonoBehaviour:
   m_CameraGame: {fileID: 2128118415}
   m_CameraUI: {fileID: 1736493110}
   m_trialLength: 1000
-  m_trialMinOffsetLength: 10
-  m_trialMaxOffsetLength: 100
+  m_trialMinOffsetLength: 20
+  m_trialMaxOffsetLength: 200
   m_bonusTimeBuoy: 10
   m_bonusTimeFish: 2
-  m_minBuoyNumber: 2
-  m_maxBuoyNumber: 10
+  m_minBuoyNumber: 4
+  m_maxBuoyNumber: 15
 --- !u!1001 &639628818
 Prefab:
   m_ObjectHideFlags: 0
