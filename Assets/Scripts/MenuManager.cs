@@ -102,8 +102,9 @@ public class MenuManager : MonoBehaviour
 		m_state = GameState.MENU;
 		m_CameraGame.tag = "Untagged";
 		m_CameraUI.tag = "MainCamera";
-		m_CameraGame.SetActive(false);
 		m_CameraUI.SetActive(true);
+		m_CameraGame.SetActive(false);
+
 		m_UIGameOver.SetActive(false);
 		m_UIMain.SetActive(true);
 		m_menu.SetActive(true);
@@ -117,6 +118,7 @@ public class MenuManager : MonoBehaviour
 			m_CameraUI.tag = "Untagged";
 			m_CameraGame.SetActive(true);
 			m_CameraUI.SetActive(false);
+
 			m_UIMain.SetActive(false);
 			m_UIGameOver.SetActive(false);
 			// start the game here
@@ -136,8 +138,8 @@ public class MenuManager : MonoBehaviour
 			m_state = GameState.END;
 			m_CameraGame.tag = "Untagged";
 			m_CameraUI.tag = "MainCamera";
-			m_CameraGame.SetActive(false);
 			m_CameraUI.SetActive(true);
+			m_CameraGame.SetActive(false);
 
 			m_UIMain.SetActive(false);
 			m_UIGameOver.SetActive(true);
