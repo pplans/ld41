@@ -29,7 +29,7 @@
 		struct Input {
 			float2 uv_DFFTex;
 			float3	N;
-			float3 viewDir;
+			float3 vertex;
 			float3 worldPos;
 			float debug;
 		};
@@ -59,7 +59,7 @@
 			data.N = v.normal;
 			data.debug = v.normal.y>0.2f;
 			data.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-			data.viewDir = normalize(v.vertex.xyz);
+			data.vertex = v.vertex.xyz;
 		}
 		
 		float3 BoxProjection(
@@ -92,7 +92,8 @@
 			}
       else
       {
-        c = _SideColor;
+	  float h = clamp(0.5*(1.0f+ IN.vertex.y), 0.0, 1.0);
+        c = lerp(float4(0.01, 0.05, 0.1, 1.0), float4(0.2, 0.5, 0.8, 1.0), h);//_SideColor;
         o.Metallic = 0.f;
         o.Smoothness = 0.f;
       }
