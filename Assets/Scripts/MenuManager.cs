@@ -74,6 +74,7 @@ public class MenuManager : MonoBehaviour
 		START,
 		MENU,
 		PLAYING,
+		PLAYINGNOTIMER,
 		END
 	};
 
@@ -138,6 +139,23 @@ public class MenuManager : MonoBehaviour
 		}
 	}
 
+	public void StartGameNoTimer()
+	{
+		if (m_state == GameState.MENU)
+		{
+			m_CameraGame.tag = "MainCamera";
+			m_CameraUI.tag = "Untagged";
+			m_CameraGame.SetActive(true);
+			m_CameraUI.SetActive(false);
+
+			m_UIMain.SetActive(false);
+			m_UIGameOver.SetActive(false);
+			// start the game here
+			Debug.Log("StartGame");
+			m_state = GameState.PLAYINGNOTIMER;
+		}
+	}
+
 	public void EndGame()
 	{
 		if (m_state == GameState.PLAYING)
@@ -161,6 +179,7 @@ public class MenuManager : MonoBehaviour
 			{
 				break;
 			}
+			case GameState.PLAYINGNOTIMER:
 			case GameState.PLAYING:
 			{
 				CaptureKeyboard();
@@ -188,6 +207,7 @@ public class MenuManager : MonoBehaviour
 					}
 					break;
 				}
+			case GameState.PLAYINGNOTIMER:
 			case GameState.PLAYING:
 				{
 					if ((Input.Mapper.IsPressed(Input.Action.Action1)&Input.Type.Up)==Input.Type.Up)

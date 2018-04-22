@@ -227,7 +227,7 @@ public class WorldUpdater : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (menu.GetState() != MenuManager.GameState.PLAYING)
+        if (!(menu.GetState() == MenuManager.GameState.PLAYING || menu.GetState() == MenuManager.GameState.PLAYINGNOTIMER))
             return;
 
         Vector3 playerOffset = UpdatePlayer();
@@ -283,7 +283,7 @@ public class WorldUpdater : MonoBehaviour {
 			}
 
 			// Updating timer until the end
-			if ((CurrentBuoy + 1) < NumberOfSteps)
+			if (MenuManager.instance.GetState()==MenuManager.GameState.PLAYING && (CurrentBuoy + 1) < NumberOfSteps)
 			{
 				TimerSecondsLeft -= Time.deltaTime;
 			}
