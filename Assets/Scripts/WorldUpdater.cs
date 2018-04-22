@@ -83,21 +83,37 @@ public class WorldUpdater : MonoBehaviour {
     void Start () {
         boatCurrentSpeed = 0.0f;
 		TimerSecondsLeft = TimerAtTheStart;
+		Generate();
+	}
+
+	void Generate()
+	{
+		CurrentBuoy = -1;
+		NumberOfSteps = (uint)Random.Range(2.0f, 4.0f);
+		if(buoys!=null)
+		foreach(Buoy b in buoys)
+		{
+			Destroy(b.go);
+		}
 		buoys = new List<Buoy>();
 
 		// Generate some buoys
 		BezierCurve path = new BezierCurve();
-		path.P1 = StartRun;
-		path.P3 = EndRun;
-		path.P2 = StartRun+0.5f*(EndRun - StartRun)+Vector3.Cross((EndRun-StartRun).normalized, Vector3.up)*4.0f;
-        for (int i=0; i < NumberOfSteps; i++)
-        {
-            GameObject newObject = Instantiate(buoyPrefab) as GameObject;
-            Vector3 newObjectPos = Random.onUnitSphere * 100;
-            newObject.transform.position = path.Get((float)i/NumberOfSteps);
-            buoys.Add(new Buoy(i, newObject));
+		float randomAngle = Random.Range(-3.14f, 3.14f);
+		path.P1 = playerBoat.transform.position;
+		path.P3 = 1000.0f*(new Vector3(Mathf.Cos(randomAngle), 0.0f, Mathf.Sin(randomAngle)));
+
+		path.P2 = StartRun + 0.5f * (EndRun - StartRun) + Vector3.Cross((EndRun - StartRun).normalized, Vector3.up) * Random.Range(10.00f, 100.0f);
+
+
+		for (int i = 0; i < NumberOfSteps; i++)
+		{
+			GameObject newObject = Instantiate(buoyPrefab) as GameObject;
+			Vector3 newObjectPos = Random.onUnitSphere * 100;
+			newObject.transform.position = path.Get((float)i / NumberOfSteps);
+			buoys.Add(new Buoy(i, newObject));
 		}
-    }
+	}
 
     // Update player, returns the sea offset
     Vector3 UpdatePlayer()
@@ -189,6 +205,14 @@ public class WorldUpdater : MonoBehaviour {
         MoveEverythingWithPlayer(playerOffset);
         StickEverythingToSea();
 
+		if((CurrentBuoy+1)>=buoys.Count)
+		{
+			MenuManager.instance.IncrementScore(computeScore());
+			// Restart
+			Generate();
+			TimerSecondsLeft = TimerAtTheStart;
+			CurrentBuoy = -1;
+		}
 		if(TimerSecondsLeft>0.0f)
 		{
 			// Next Buoy
@@ -198,6 +222,7 @@ public class WorldUpdater : MonoBehaviour {
 				if ((playerBoat.transform.position - buoy.go.transform.position).sqrMagnitude < 1.0f)
 				{
 					CurrentBuoy = (CurrentBuoy + 1) < NumberOfSteps ? CurrentBuoy + 1 : CurrentBuoy;
+					TimerSecondsLeft += 10.0f;
 				}
 			}
 			// DrawHelp
@@ -218,7 +243,7 @@ public class WorldUpdater : MonoBehaviour {
 		}
 		else
 		{
-			// Restart
+			/* Ultimate End*/
 			MenuManager.instance.RegisterScore(computeScore());
 			TimerSecondsLeft = TimerAtTheStart;
 			CurrentBuoy = -1;
@@ -228,7 +253,7 @@ public class WorldUpdater : MonoBehaviour {
 		// UI
 		if (UIScoreValue!=null)
 		{
-			UIScoreValue.text = computeScore().ToString();
+			UIScoreValue.text = MenuManager.instance.GetScore().ToString();
 		}
 
 		if (UINumBuoys != null)

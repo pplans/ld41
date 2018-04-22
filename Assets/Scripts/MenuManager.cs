@@ -214,4 +214,14 @@ public class MenuManager : MonoBehaviour
 	{
 		m_score = score;
 	}
+
+	public void IncrementScore(float score)
+	{
+		m_score += score;
+	}
+
+	public float GetScore()
+	{
+		return m_score;
+	}
 }
