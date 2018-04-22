@@ -19,6 +19,8 @@ public class WorldUpdater : MonoBehaviour {
 
     public Object buoyPrefab;
     public Object smallFishPrefab;
+    public Object mediumFishPrefab;
+    public Object bigFishPrefab;
 
     public float boatRotationSpeed = 200.0f;
     public float boatAcceleration = 2.0f;
@@ -64,7 +66,7 @@ public class WorldUpdater : MonoBehaviour {
             MEDIUM,
             LARGE
         };
-        Type type;
+        Type type = Type.SMALL;
 
         public Fish(Type _type, GameObject _go)
         {
@@ -127,10 +129,20 @@ public class WorldUpdater : MonoBehaviour {
         fishs = new List<Fish>();
         for (int i = 0; i < NumberOfSteps; i++)
         {
-            GameObject newObject = Instantiate(smallFishPrefab) as GameObject;
+            GameObject newObject;
+            int type = Random.Range(0, 3);
+
+            if (type == 0)
+                newObject = Instantiate(smallFishPrefab) as GameObject;
+            else if(type == 1)
+                newObject = Instantiate(mediumFishPrefab) as GameObject;
+            else
+                newObject = Instantiate(bigFishPrefab) as GameObject;
+
             Vector3 newObjectPos = Random.onUnitSphere * 5;
             newObject.transform.position = path.Get((float)i / NumberOfSteps) + newObjectPos;
-            fishs.Add(new Fish(Fish.Type.SMALL, newObject));
+
+            fishs.Add(new Fish((Fish.Type)type, newObject));
         }
     }
 
