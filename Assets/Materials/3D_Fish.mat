@@ -65,7 +65,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Outline: 0.01792
+    - _Outline: 0.0158
     - _Parallax: 0.02
     - _SeaWidth: 10
     - _SmoothnessTextureChannel: 0
