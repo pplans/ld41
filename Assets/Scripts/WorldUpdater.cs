@@ -282,17 +282,24 @@ public class WorldUpdater : MonoBehaviour {
         MoveEverythingWithPlayer(playerOffset);
         StickEverythingToSea();
 
-		if(ais.Count==0)
+		if(ais.Count<20)
 		{
 			AI ai = new AI();
 			ai.go = Instantiate(aiPrefab) as GameObject;
-			ai.go.transform.position = playerBoat.transform.position;
-			ai.direction = Vector3.forward;
+			ai.go.transform.position = new Vector3(Random.Range(-1000.0f, 1000.0f), 0.0f, Random.Range(-1000.0f, 1000.0f));
+			ai.direction = playerBoat.transform.rotation*Vector3.forward;
 			ais.Add(ai);
 		}
-		foreach(AI ai in ais)
+		for(int i = 0;i<ais.Count;++i)
 		{
-			ai.go.transform.position += ai.direction * Time.deltaTime * 5.0f;
+			ais[i].go.transform.position += ais[i].direction * Time.deltaTime * 5.0f;
+			if(ais[i].go.transform.position.sqrMagnitude>seaWidth*10.0f)
+			{
+				ais[i].direction = Vector3.Lerp(ais[i].direction, playerBoat.transform.rotation * Vector3.forward, Time.deltaTime);
+				ais[i].go.transform.rotation.SetLookRotation(ais[i].direction, Vector3.up);
+				//Destroy(ais[i].go);
+				//ais.Remove(ais[i]);
+			}
 		}
 
 		if((CurrentBuoy+1)>=buoys.Count)

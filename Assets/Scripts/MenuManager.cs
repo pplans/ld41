@@ -96,9 +96,11 @@ public class MenuManager : MonoBehaviour
 	public float m_bonusTimeFish = 2.0f;
 	public float BonusTimeFish { get { return m_bonusTimeFish; } set { } }
 	public uint m_minBuoyNumber = 2;
-	public float MinBuoyNumber { get { return m_minBuoyNumber; } set { } }
+	public uint MinBuoyNumber { get { return m_minBuoyNumber; } set { } }
 	public uint m_maxBuoyNumber = 10;
-	public float MaxBuoyNumber { get { return m_maxBuoyNumber; } set { } }
+	public uint MaxBuoyNumber { get { return m_maxBuoyNumber; } set { } }
+	public float m_speedWaterClimate = 0.1f;
+	public float SpeedWaterClimate { get { return m_speedWaterClimate; } set { } }
 
 	void Awake()
 	{

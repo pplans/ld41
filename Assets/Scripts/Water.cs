@@ -24,6 +24,24 @@ public class Water : MonoBehaviour
 	public float sea_freq = 0.1f;
     public float sea_offset_uvfactor = 0.1f;
 
+	struct PresetNormal
+	{
+		public const float choppy = 4.0f;
+		public const float level = 0.5f;
+		public const float speed = 1.0f;
+		public const float freq = 0.1f;
+		public const float offset_uvfactor = 0.1f;
+	};
+
+	struct PresetHuge
+	{
+		public const float choppy = 5.0f;
+		public const float level = 1.0f;
+		public const float speed = 1.1f;
+		public const float freq = 0.1f;
+		public const float offset_uvfactor = 0.1f;
+	};
+
 	public Vector3 Offset;
 
 	// Use this for initialization
@@ -211,6 +229,14 @@ public class Water : MonoBehaviour
 		mesh.RecalculateBounds();
 		time += Time.deltaTime;
 		//if (time > Mathf.PI * 2.0f) time = 0.0f;
+
+		float s = 0.5f * (Mathf.Sin(time * MenuManager.instance.SpeedWaterClimate) + 1.0f);
+
+		// lerping
+		sea_choppy = Mathf.Lerp(PresetNormal.choppy, PresetHuge.choppy, s);
+		sea_level = Mathf.Lerp(PresetNormal.level, PresetHuge.level, s);
+		sea_freq = Mathf.Lerp(PresetNormal.freq, PresetHuge.freq, s);
+		sea_speed = Mathf.Lerp(PresetNormal.speed, PresetHuge.speed, s);
 	}
 
 	float getHeightAtPoint(Vector2 p, out Vector3 normal)
