@@ -15,6 +15,7 @@ public class WorldUpdater : MonoBehaviour {
 	public float TimerAtTheStart = 60.0f;
 
     public Object buoyPrefab;
+    public Object smallFishPrefab;
 
     public float boatRotationSpeed = 200.0f;
     public float boatAcceleration = 2.0f;
@@ -48,7 +49,26 @@ public class WorldUpdater : MonoBehaviour {
 	private List<Buoy> buoys;
 	private int CurrentBuoy = -1;
 
-	class BezierCurve
+    class Fish
+    {
+        public GameObject go;
+        public enum Type
+        {
+            SMALL,
+            MEDIUM,
+            LARGE
+        };
+        Type type;
+
+        public Fish(Type _type, GameObject _go)
+        {
+            type = _type;
+            go = _go;
+        }
+    }
+    private List<Fish> fishs;
+
+    class BezierCurve
 	{
 		public Vector3 P1;
 		public Vector3 P2;
