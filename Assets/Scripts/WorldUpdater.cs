@@ -290,6 +290,8 @@ public class WorldUpdater : MonoBehaviour {
 				{
 					CurrentBuoy = (CurrentBuoy + 1) < NumberOfSteps ? CurrentBuoy + 1 : CurrentBuoy;
 					TimerSecondsLeft += MenuManager.instance.BonusTimeBuoy;
+					ParticleSystem ps = buoy.go.GetComponentInChildren<ParticleSystem>();
+					ps.Play();
 				}
 			}
 			// DrawHelp
