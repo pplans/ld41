@@ -66,6 +66,7 @@ public class Water : MonoBehaviour
 
 		int amountData = width * width + width * width;
 		Vector3[] vertices = new Vector3[amountData];
+		Vector3[] normals = new Vector3[amountData];
 		int[] triangles;
 		Vector2[] uv = new Vector2[amountData];
 		int k = 0;
@@ -78,6 +79,7 @@ public class Water : MonoBehaviour
 					top,
 					(j - width * 0.5f) / (width*0.5f)
 				);
+				normals[k] = Vector3.up;
 				uv[k] = new Vector2(
 					(float)i / width,
 					(float)j / width
@@ -87,6 +89,7 @@ public class Water : MonoBehaviour
 					bot,
 					(j - width * 0.5f) / (width * 0.5f)
 				);
+				normals[k + width * width] = -Vector3.up;
 				uv[k+width*width] = new Vector2(
 					(float)i / width,
 					(float)j / width
@@ -183,6 +186,7 @@ public class Water : MonoBehaviour
 		}
 
 		m_mesh.uv = uv;
+		m_mesh.normals = normals;
 		m_mesh.triangles = triangles;
 		m_mesh.RecalculateNormals();
 		GetComponent<MeshFilter>().mesh = m_mesh;
