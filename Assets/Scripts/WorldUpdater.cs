@@ -12,6 +12,7 @@ public class WorldUpdater : MonoBehaviour {
 	public Text UIScoreValue = null;
 	public Text UINumBuoys = null;
 	public Text UITimer = null;
+	public ParticleSystem m_splash = null;
 
     public float BuoyCatchSqrRange = 1.0f;
     public float FishCatchSqrRange = 1.0f;
@@ -154,7 +155,14 @@ public class WorldUpdater : MonoBehaviour {
             boatCurrentSpeed = Mathf.Lerp(0.0f, boatCurrentSpeed, Mathf.Pow(2.0f, -boatDrag * Time.deltaTime));
         }
 
-        return (playerBoat.transform.rotation * Vector3.forward) * boatCurrentSpeed;
+		if(m_splash!=null)
+		{
+			var main = m_splash.main;
+			main.startLifetimeMultiplier = 2.0f*boatCurrentSpeed;
+		}
+
+
+		return (playerBoat.transform.rotation * Vector3.forward) * boatCurrentSpeed;
     }
 
     void StickEverythingToSea()
