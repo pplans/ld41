@@ -13,7 +13,7 @@ Shader "Custom/ClippedStandard" {
 		Tags { "RenderType"="Opaque" }
 		LOD 200
       
-		/*Pass {
+		Pass {
 			Fog { Mode Off }
 			Cull Back
 			Lighting Off
@@ -50,7 +50,7 @@ Shader "Custom/ClippedStandard" {
 				}
 			ENDCG
    
-		}*/
+		}
 		CGPROGRAM
 		// Physically based Standard lighting model, and enable shadows on all light types
 #pragma surface surf Standard fullforwardshadows
@@ -86,7 +86,7 @@ Shader "Custom/ClippedStandard" {
 
 			// Albedo comes from a texture tinted by color
 			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
-			o.Albedo = float3(clippingval, clippingval, clippingval);//c.rgb;
+			o.Albedo = c.rgb;
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
