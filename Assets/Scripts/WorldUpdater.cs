@@ -262,12 +262,19 @@ public class WorldUpdater : MonoBehaviour {
 				TimerSecondsLeft -= Time.deltaTime;
 			}
 		}
+		else
+		{
+			// Restart
+			MenuManager.instance.RegisterScore(computeScore());
+			TimerSecondsLeft = TimerAtTheStart;
+			CurrentBuoy = -1;
+			MenuManager.instance.EndGame();
+		}
 
 		// UI
 		if (UIScoreValue!=null)
 		{
-			float score = CurrentBuoy * 100.0f - (TimerAtTheStart - TimerSecondsLeft) * 10.0f;
-			UIScoreValue.text = score.ToString();
+			UIScoreValue.text = computeScore().ToString();
 		}
 
 		if (UINumBuoys != null)
@@ -282,5 +289,10 @@ public class WorldUpdater : MonoBehaviour {
 
 
 		ClipEverythingOutsideSea();
+	}
+
+	private float computeScore()
+	{
+		return CurrentBuoy * 100.0f - (TimerAtTheStart - TimerSecondsLeft) * 10.0f;
 	}
 }

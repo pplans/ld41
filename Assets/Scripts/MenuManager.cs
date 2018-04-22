@@ -77,12 +77,12 @@ public class MenuManager : MonoBehaviour
 		END
 	};
 
-	public GameObject m_menu;
-
-
 	private GameState m_state;
-	public GameObject m_UI;
-	public GameObject m_3D;
+	public GameObject m_UIMain;
+	public GameObject m_UIGameOver;
+	public GameObject m_CameraGame;
+	public GameObject m_CameraUI;
+	private float m_score;
 
 	void Awake()
 	{
@@ -94,34 +94,50 @@ public class MenuManager : MonoBehaviour
 		InitGame();
 	}
 
-	void InitGame()
+	public void InitGame()
 	{
 		m_state = GameState.MENU;
-		m_3D.tag = "Untagged";
-		m_3D.SetActive(false);
-		m_UI.SetActive(true);
-		m_UI.tag = "MainCamera";
-		m_menu.SetActive(true);
+		m_CameraUI.tag = "MainCamera";
+		m_CameraGame.tag = "Untagged";
+		m_CameraUI.SetActive(true);
+		m_CameraGame.SetActive(false);
+
+		m_UIGameOver.SetActive(false);
+		m_UIMain.SetActive(true);
 	}
 
 	public void StartGame()
 	{
 		if(m_state == GameState.MENU)
 		{
-			m_3D.tag = "MainCamera";
-			m_3D.SetActive(true);
-			m_UI.SetActive(false);
-			m_UI.tag = "Untagged";
+			m_CameraGame.tag = "MainCamera";
+			m_CameraUI.tag = "Untagged";
+			m_CameraGame.SetActive(true);
+			m_CameraUI.SetActive(false);
+
+			m_UIMain.SetActive(false);
+			m_UIGameOver.SetActive(false);
 			// start the game here
 			Debug.Log("StartGame");
 			m_state = GameState.PLAYING;
-			if(m_menu)
-			{
-				m_menu.SetActive(false);
-			}
 		}
 	}
-   
+
+	public void EndGame()
+	{
+		if (m_state == GameState.PLAYING)
+		{
+			m_state = GameState.END;
+			m_CameraUI.tag = "MainCamera";
+			m_CameraGame.tag = "Untagged";
+			m_CameraUI.SetActive(true);
+			m_CameraGame.SetActive(false);
+
+			m_UIMain.SetActive(false);
+			m_UIGameOver.SetActive(true);
+		}
+	}
+
 	void Update()
 	{
 		switch(m_state)
@@ -192,5 +208,10 @@ public class MenuManager : MonoBehaviour
 			}
 			Input.Mapper.Actions[index] = input;
 		}
+	}
+
+	public void RegisterScore(float score)
+	{
+		m_score = score;
 	}
 }
