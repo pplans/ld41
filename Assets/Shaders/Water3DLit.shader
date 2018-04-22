@@ -76,11 +76,18 @@
 		void surf (Input IN, inout SurfaceOutputStandard o)
 		{
 			// Albedo comes from a texture tinted by color
-			float2 speedBoat = max(float2(0.001, 0.001), _SpeedBoatWind.xy);
-			float2 speedWind = max(float2(0.001, 0.001), _SpeedBoatWind.zw);
-			float2 uv = _BoatPosition.xy + _UVTiling * (IN.uv_DFFTex + (_Time.xx*speedBoat.xy*speedWind.xy));
-			fixed4 c = tex2D(_DFFTex, uv) * _Color;
-			float3 normal = UnpackNormal(tex2D(_NormTex, uv));
+			fixed4 c = _Color;
+			float3 normal = IN.N;
+			//if (dot(IN.N, float3(0.0, 1.0, 0.0)) > 0.2)
+			{
+				float2 speedBoat = max(float2(0.001, 0.001), _SpeedBoatWind.xy);
+				float2 speedWind = max(float2(0.001, 0.001), _SpeedBoatWind.zw);
+				float2 uv = _BoatPosition.xy + _UVTiling * (IN.uv_DFFTex + (_Time.xx*speedBoat.xy*speedWind.xy));
+				c = tex2D(_DFFTex, uv) * _Color;
+				normal = UnpackNormal(tex2D(_NormTex, uv));
+				o.Metallic = _Metallic;
+				o.Smoothness = _Glossiness;
+			}
 
 			/*Unity_GlossyEnvironmentData envData;
 			envData.roughness = 1 - 0.0f;
@@ -98,8 +105,6 @@
 			o.Albedo = c.rgb;
 			o.Normal = normal;
 			// Metallic and smoothness come from slider variables
-			o.Metallic = _Metallic;
-			o.Smoothness = _Glossiness;
 			o.Alpha = c.a;
 		}
 		ENDCG
