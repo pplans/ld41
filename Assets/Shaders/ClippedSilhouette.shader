@@ -33,7 +33,7 @@ Shader "Custom/Silhouetted Diffuse"
 	  SubShader
 	  {
 		    Tags { "Queue" = "Transparent" }
-			Pass{
+			/*Pass{
 				Name "BASE"
 				Cull Back
 				ZTest Always
@@ -47,7 +47,7 @@ Shader "Custom/Silhouetted Diffuse"
 					ConstantColor(0,0,0,0)
 					Combine constant
 				}
-			}
+			}*/
  
 		    // note that a vertex shader is specified here but its using the one above
 		    Pass {
@@ -96,7 +96,7 @@ Shader "Custom/Silhouetted Diffuse"
 						float2 corner = float2(_SeaWidth / 2, _SeaWidth / 2);
 						clip (min(corner - i.worldPos.xz, corner + i.worldPos.xz));
 
-						return i.color;
+						return i.color * i.color.a;
 					}
 				ENDCG
 		    }
