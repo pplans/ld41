@@ -74,9 +74,9 @@ public class Water : MonoBehaviour
 			for (int i = 0; i < width; i++, k++)
 			{
 				vertices[k] = new Vector3(
-					(i - width * 0.5f) / (width*0.5f),
+					(i - (width-1) * 0.5f) / ((width-1)*0.5f),
 					top,
-					(j - width * 0.5f) / (width*0.5f)
+					(j - (width-1) * 0.5f) / ((width-1)*0.5f)
 				);
 				normals[k] = Vector3.up;
 				uv[k] = new Vector2(
@@ -84,9 +84,9 @@ public class Water : MonoBehaviour
 					(float)j / width
 					);
 				vertices[k+width*width] = new Vector3(
-					(i - width * 0.5f) / (width * 0.5f),
+					(i - (width - 1) * 0.5f) / ((width - 1) * 0.5f),
 					bot,
-					(j - width * 0.5f) / (width * 0.5f)
+					(j - (width - 1) * 0.5f) / ((width - 1) * 0.5f)
 				);
 				normals[k + width * width] = -Vector3.up;
 				uv[k+width*width] = new Vector2(
