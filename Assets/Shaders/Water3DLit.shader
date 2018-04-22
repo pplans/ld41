@@ -16,6 +16,8 @@
 		CGPROGRAM
 		// Physically based Standard lighting model, and enable shadows on all light types
 		#pragma surface surf Standard fullforwardshadows vertex:vert
+		#include "UnityStandardBRDF.cginc"
+
 
 		// Use shader model 3.0 target, to get nicer looking lighting
 		#pragma target 3.0
@@ -26,6 +28,8 @@
 		struct Input {
 			float2 uv_DFFTex;
 			float3	N;
+			float3 viewDir;
+			float3 worldPos;
 			float debug;
 		};
 
@@ -52,6 +56,21 @@
 			}
 			data.N = v.normal;
 			data.debug = v.normal.y>0.2f;
+			data.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+			data.viewDir = normalize(v.vertex.xyz);
+		}
+		
+		float3 BoxProjection(
+			float3 direction, float3 position,
+			float4 cubemapPosition, float3 boxMin, float3 boxMax
+		) {
+			if (cubemapPosition.w > 0) {
+				float3 factors =
+					((direction > 0 ? boxMax : boxMin) - position) / direction;
+				float scalar = min(min(factors.x, factors.y), factors.z);
+				direction = direction * scalar + (position - cubemapPosition.xyz);
+			}
+			return direction;
 		}
 
 		void surf (Input IN, inout SurfaceOutputStandard o)
@@ -61,8 +80,23 @@
 			float2 speedWind = max(float2(0.001, 0.001), _SpeedBoatWind.zw);
 			float2 uv = _BoatPosition.xy + _UVTiling * (IN.uv_DFFTex + (_Time.xx*speedBoat.xy*speedWind.xy));
 			fixed4 c = tex2D(_DFFTex, uv) * _Color;
+			float3 normal = UnpackNormal(tex2D(_NormTex, uv));
+
+			/*Unity_GlossyEnvironmentData envData;
+			envData.roughness = 1 - 0.0f;
+			envData.reflUVW = BoxProjection(
+				reflect(IN.viewDir , normal), IN.worldPos,
+				unity_SpecCube0_ProbePosition,
+				unity_SpecCube0_BoxMin.xyz, unity_SpecCube0_BoxMax.xyz
+			);
+			sampleCUBE cube = UNITY_PASS_TEXCUBE(unity_SpecCube0);
+			float4 probe0 = Unity_GlossyEnvironment(
+				cube, unity_SpecCube0_HDR, envData
+			);
+			float3 probe0NoHDR = DecodeHDR(probe0, unity_SpecCube0_HDR);*/
+
 			o.Albedo = c.rgb;
-			o.Normal = UnpackNormal(tex2D(_NormTex, uv));
+			o.Normal = normal;
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
