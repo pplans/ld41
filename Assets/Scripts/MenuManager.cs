@@ -85,6 +85,8 @@ public class MenuManager : MonoBehaviour
 	public GameObject m_CameraUI;
 	public WorldUpdater m_WorldUpdater;
 	private float m_score;
+	private int m_playerPosition;
+	public int PlayerPosition { get { return m_playerPosition; } set{ m_playerPosition = value; } }
 
 	public float m_trialLength = 1000.0f;
 	public float TrialLength { get { return m_trialLength; } set { } }

@@ -13,12 +13,14 @@ public class WorldUpdater : MonoBehaviour {
 	public Text UIScoreValue2 = null;
 	public Text UINumBuoys = null;
 	public Text UITimer = null;
+	public Text UIPlayerPosition = null;
 	public ParticleSystem m_splash = null;
 
     public float BuoyCatchSqrRange = 1.0f;
-    public float FishCatchSqrRange = 1.0f;
+	public float FishCatchSqrRange = 1.0f;
+	public float BuoyCatchSqrRangeAI = 2.0f;
 
-    public Object buoyPrefab;
+	public Object buoyPrefab;
     public Object smallFishPrefab;
     public Object mediumFishPrefab;
     public Object bigFishPrefab;
@@ -82,10 +84,14 @@ public class WorldUpdater : MonoBehaviour {
     }
     private List<Fish> fishs;
 
+	public uint numberIAs = 3;
 	class AI
 	{
 		public GameObject go;
 		public Vector3 direction;
+		public int CurrentBuoy;
+		public float currentSpeed;
+		public float score;
 	}
 	private List<AI> ais = null;
 
@@ -134,6 +140,9 @@ public class WorldUpdater : MonoBehaviour {
 	void Generate()
 	{
 		CurrentBuoy = -1;
+		if(ais!=null)
+		foreach(AI a in ais)
+			a.CurrentBuoy = -1;
 		NumberOfSteps = (uint)Random.Range(MenuManager.instance.MinBuoyNumber, MenuManager.instance.MaxBuoyNumber);
 		if(buoys!=null)
 		foreach(Buoy b in buoys)
@@ -297,7 +306,11 @@ public class WorldUpdater : MonoBehaviour {
         if (fishs != null)
             foreach (var f in fishs)
                 f.go.transform.position -= deltaPlayerPos;
-    }
+
+		if (ais != null)
+			foreach (var a in ais)
+				a.go.transform.position -= deltaPlayerPos - a.direction*a.currentSpeed;
+	}
 
     bool IsInsideSea(Vector3 pos)
     {
@@ -314,7 +327,11 @@ public class WorldUpdater : MonoBehaviour {
         foreach (Fish f in fishs)
             foreach (var comp in f.go.GetComponentsInChildren<Renderer>())
                 comp.enabled = IsInsideSea(f.go.transform.position);
-    }
+
+		foreach (AI a in ais)
+			foreach (var comp in a.go.GetComponentsInChildren<Renderer>())
+				comp.enabled = IsInsideSea(a.go.transform.position);
+	}
 
     // Update is called once per frame
     void Update () {
@@ -325,25 +342,38 @@ public class WorldUpdater : MonoBehaviour {
 
         MoveEverythingWithPlayer(playerOffset);
         StickEverythingToSea();
-
-		if(ais.Count<20)
+		for (int i = 0; i < ais.Count; ++i)
 		{
-			AI ai = new AI();
-			ai.go = Instantiate(aiPrefab) as GameObject;
-			ai.go.transform.position = new Vector3(Random.Range(-1000.0f, 1000.0f), 0.0f, Random.Range(-1000.0f, 1000.0f));
-			ai.direction = playerBoat.transform.rotation*Vector3.forward;
-			ais.Add(ai);
-		}
-		for(int i = 0;i<ais.Count;++i)
-		{
-			ais[i].go.transform.position += ais[i].direction * Time.deltaTime * 5.0f;
-			if(ais[i].go.transform.position.sqrMagnitude>seaWidth*10.0f)
+			Vector3 aiRandomOffset = new Vector3(Random.Range(-BuoyCatchSqrRangeAI, BuoyCatchSqrRangeAI), 0.0f, Random.Range(-BuoyCatchSqrRangeAI, BuoyCatchSqrRangeAI));
+			if ((ais[i].CurrentBuoy + 1) < buoys.Count)
 			{
-				ais[i].direction = Vector3.Lerp(ais[i].direction, playerBoat.transform.rotation * Vector3.forward, Time.deltaTime);
-				ais[i].go.transform.rotation.SetLookRotation(ais[i].direction, Vector3.up);
-				//Destroy(ais[i].go);
-				//ais.Remove(ais[i]);
+				Buoy buoy = buoys[ais[i].CurrentBuoy + 1];
+				ais[i].direction = (buoy.go.transform.position + aiRandomOffset - ais[i].go.transform.position).normalized;
+				ais[i].go.transform.LookAt(buoy.go.transform.position + aiRandomOffset);
+				if ((ais[i].go.transform.position - buoy.go.transform.position).sqrMagnitude < BuoyCatchSqrRangeAI)
+				{
+					ais[i].CurrentBuoy = (ais[i].CurrentBuoy + 1) < NumberOfSteps ? ais[i].CurrentBuoy + 1 : ais[i].CurrentBuoy;
+					if(menu.GetState() == MenuManager.GameState.PLAYING && (ais[i].CurrentBuoy + 1) >= buoys.Count)
+					{
+						// AI arrived before you
+						TimerSecondsLeft = TimerAtTheStart;
+						int playerPosition = ais.Count+1;
+						foreach(AI a in ais)
+						{
+							if (CurrentBuoy > a.CurrentBuoy)
+								playerPosition--;
+						}
+						MenuManager.instance.PlayerPosition = playerPosition;
+						CurrentBuoy = -1;
+						MenuManager.instance.EndGame();
+					}
+				}
 			}
+			else
+			{
+				ais[i].direction = (aiRandomOffset*10.0f - ais[i].go.transform.position).normalized;
+			}
+			//ais[i].currentSpeed = Mathf.Lerp(boatMaxSpeed, ais[i].currentSpeed, Mathf.Pow(2.0f, -boatAcceleration * Time.deltaTime));
 		}
 
 		if((CurrentBuoy+1)>=buoys.Count)
@@ -356,8 +386,28 @@ public class WorldUpdater : MonoBehaviour {
 		}
 		if(TimerSecondsLeft>0.0f)
 		{
-            // Catch fish
-            List<Fish> fishesToDelete = new List<Fish>();
+			if (ais.Count < numberIAs)
+			{
+				AI ai = new AI();
+				ai.go = Instantiate(aiPrefab) as GameObject;
+				Vector3 aiRandomOffset = new Vector3(Random.Range(-BuoyCatchSqrRangeAI, BuoyCatchSqrRangeAI), 0.0f, Random.Range(-BuoyCatchSqrRangeAI, BuoyCatchSqrRangeAI));
+				ai.go.transform.position = playerBoat.transform.position + aiRandomOffset;
+				ai.CurrentBuoy = -1;
+				ai.currentSpeed = Random.Range(0.05f, boatMaxSpeed*0.2f);
+				if ((ai.CurrentBuoy + 1) < buoys.Count)
+				{
+					Buoy buoy = buoys[ai.CurrentBuoy + 1];
+					ai.direction = (buoy.go.transform.position+ aiRandomOffset - ai.go.transform.position).normalized;
+				}
+				else
+				{
+					ai.direction = (aiRandomOffset - ai.go.transform.position).normalized;
+				}
+				ais.Add(ai);
+			}
+
+			// Catch fish
+			List<Fish> fishesToDelete = new List<Fish>();
             foreach (Fish f in fishs)
             {
 				if ((playerFishNet.transform.position - f.go.transform.position).sqrMagnitude < FishCatchSqrRange)
@@ -430,6 +480,11 @@ public class WorldUpdater : MonoBehaviour {
 		if (UITimer != null)
 		{
 			UITimer.text = TimerSecondsLeft.ToString("F2")+"s";
+		}
+
+		if (UIPlayerPosition != null)
+		{
+			UIPlayerPosition.text = MenuManager.instance.PlayerPosition.ToString()+"/"+(numberIAs+1);
 		}
 
 
