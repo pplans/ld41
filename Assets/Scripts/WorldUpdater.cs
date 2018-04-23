@@ -85,6 +85,16 @@ public class WorldUpdater : MonoBehaviour {
     }
     private List<Fish> fishs;
 
+	public int numberStaticObject = 10;
+	class StaticObject
+	{
+		public GameObject go;
+		public float radius;
+	}
+	private List<StaticObject> staticObjects;
+
+	public List<GameObject> staticObjectPrefabs;
+
 	public uint numberIAs = 3;
 	class AI
 	{
@@ -198,6 +208,30 @@ public class WorldUpdater : MonoBehaviour {
 
             fishs.Add(new Fish((Fish.Type)type, newObject));
         }
+
+		if (staticObjects != null)
+			foreach (StaticObject s in staticObjects)
+			{
+				Destroy(s.go);
+			}
+		staticObjects = new List<StaticObject>();
+		// generate static objects
+		if (staticObjectPrefabs.Count > 0)
+		{
+			for (int i = 0; i < numberStaticObject; ++i)
+			{
+				StaticObject so = new StaticObject();
+				so.go = Instantiate(staticObjectPrefabs[(int)Random.Range(0.0f, (float)staticObjectPrefabs.Count - 1)]) as GameObject;
+				so.radius = so.go.transform.localScale.magnitude * 0.5f;
+				so.go.transform.position = new Vector3(Random.Range(-MenuManager.instance.TrialLength, MenuManager.instance.TrialLength), 0.0f, Random.Range(-MenuManager.instance.TrialLength, MenuManager.instance.TrialLength));
+				if ((playerBoat.transform.position - so.go.transform.position).magnitude < (so.radius + 0.5f))
+				{
+					so.go.transform.position += Vector3.right * 2.0f;
+				}
+				so.go.transform.Rotate(Vector3.up, Random.Range(0.0f, 360.0f));
+				staticObjects.Add(so);
+			}
+		}
     }
 
     // Update player, returns the sea offset
@@ -236,6 +270,14 @@ public class WorldUpdater : MonoBehaviour {
         boatAnimator.SetFloat("Speed", boatCurrentSpeed);
 
 		Vector3 playerOffset = (playerBoat.transform.rotation * Vector3.forward) * boatCurrentSpeed;
+		// collision
+		foreach(StaticObject s in staticObjects)
+		{
+			if((playerBoat.transform.position-s.go.transform.position).magnitude<(s.radius+0.5f))
+			{
+				playerOffset = Vector3.zero;
+			}
+		}
 
 		// Update fishnet location
 		playerFishNet.transform.position -= playerOffset;
@@ -315,6 +357,10 @@ public class WorldUpdater : MonoBehaviour {
 		if (ais != null)
 			foreach (var a in ais)
 				a.go.transform.position -= deltaPlayerPos - a.direction*a.currentSpeed;
+
+		if (staticObjects != null)
+			foreach (var s in staticObjects)
+				s.go.transform.position -= deltaPlayerPos;
 	}
 
     bool IsInsideSea(Vector3 pos)
@@ -336,6 +382,10 @@ public class WorldUpdater : MonoBehaviour {
 		foreach (AI a in ais)
 			foreach (var comp in a.go.GetComponentsInChildren<Renderer>())
 				comp.enabled = IsInsideSea(a.go.transform.position);
+
+		foreach (StaticObject s in staticObjects)
+			foreach (var comp in s.go.GetComponentsInChildren<Renderer>())
+				comp.enabled = IsInsideSea(s.go.transform.position);
 	}
 
     // Update is called once per frame

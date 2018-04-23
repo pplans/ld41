@@ -709,7 +709,7 @@ MonoBehaviour:
   m_CameraGame: {fileID: 2128118415}
   m_CameraUI: {fileID: 1736493110}
   m_WorldUpdater: {fileID: 1208099512}
-  m_trialLength: 100
+  m_trialLength: 1000
   m_trialMinOffsetLength: 20
   m_trialMaxOffsetLength: 200
   m_bonusTimeBuoy: 10
@@ -891,6 +891,48 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1001 &793763184
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4611302819439498, guid: 1c56e642df446cd4ab000573427e2fcd, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 55.69258
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611302819439498, guid: 1c56e642df446cd4ab000573427e2fcd, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -49.841152
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611302819439498, guid: 1c56e642df446cd4ab000573427e2fcd, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 39.445892
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611302819439498, guid: 1c56e642df446cd4ab000573427e2fcd, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611302819439498, guid: 1c56e642df446cd4ab000573427e2fcd, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611302819439498, guid: 1c56e642df446cd4ab000573427e2fcd, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611302819439498, guid: 1c56e642df446cd4ab000573427e2fcd, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611302819439498, guid: 1c56e642df446cd4ab000573427e2fcd, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 1c56e642df446cd4ab000573427e2fcd, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &857389818
 GameObject:
   m_ObjectHideFlags: 0
@@ -8416,6 +8458,9 @@ MonoBehaviour:
   EndRun: {x: 10, y: 0, z: 10}
   NumberOfSteps: 4
   TimerAtTheStart: 10
+  numberStaticObject: 10
+  staticObjectPrefabs:
+  - {fileID: 1861257694790586, guid: 1c56e642df446cd4ab000573427e2fcd, type: 2}
   numberIAs: 3
 --- !u!1 &1208991035
 GameObject:
@@ -9891,5 +9936,5 @@ Transform:
   - {fileID: 1199996750}
   - {fileID: 639628819}
   m_Father: {fileID: 1208099511}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: 45.000004, z: 0}
