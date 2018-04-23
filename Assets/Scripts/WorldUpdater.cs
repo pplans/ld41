@@ -441,7 +441,11 @@ public class WorldUpdater : MonoBehaviour {
 		foreach (StaticObject s in staticObjects)
 			foreach (var comp in s.go.GetComponentsInChildren<Renderer>())
 				comp.enabled = IsInsideSea(s.go.transform.position);
-	}
+
+        foreach (StaticObject s in staticObjectslm1)
+            foreach (var comp in s.go.GetComponentsInChildren<Renderer>())
+                comp.enabled = IsInsideSea(s.go.transform.position);
+    }
 
     // Update is called once per frame
     void Update () {
