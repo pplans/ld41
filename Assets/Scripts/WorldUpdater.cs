@@ -93,8 +93,9 @@ public class WorldUpdater : MonoBehaviour {
 		public float radius;
 	}
 	private List<StaticObject> staticObjects;
+    private List<StaticObject> staticObjectslm1; // staticObjects from previous leg, we keep them a bit so they don't vanish when we reach a checkpoint
 
-	public List<GameObject> staticObjectPrefabs;
+    public List<GameObject> staticObjectPrefabs;
 
 	public uint numberIAs = 3;
 	class AI
@@ -220,11 +221,14 @@ public class WorldUpdater : MonoBehaviour {
             fishs.Add(new Fish((Fish.Type)type, newObject));
         }
 
-		if (staticObjects != null)
-			foreach (StaticObject s in staticObjects)
-			{
-				Destroy(s.go);
-			}
+        if (staticObjectslm1 != null)
+        {
+            foreach (StaticObject s in staticObjectslm1)
+            {
+                Destroy(s.go);
+            }
+        }
+        staticObjectslm1 = staticObjects;
 		staticObjects = new List<StaticObject>();
 		// generate static objects
 		if (staticObjectPrefabs.Count > 0)
@@ -303,11 +307,21 @@ public class WorldUpdater : MonoBehaviour {
 			if((playerBoat.transform.position-s.go.transform.position).magnitude<(s.radius+0.5f))
 			{
 				playerOffset = -playerOffset;
+                boatCurrentSpeed *= -1.0f;
 			}
 		}
+        // collision
+        foreach (StaticObject s in staticObjectslm1)
+        {
+            if ((playerBoat.transform.position - s.go.transform.position).magnitude < (s.radius + 0.5f))
+            {
+                playerOffset = -playerOffset;
+                boatCurrentSpeed *= -1.0f;
+            }
+        }
 
-		// Update fishnet location
-		playerFishNet.transform.position -= playerOffset;
+        // Update fishnet location
+        playerFishNet.transform.position -= playerOffset;
 		float lerpFactor = Mathf.Pow (2.0f, -fishNetRate * Time.deltaTime);
 		playerFishNet.transform.position = Vector3.Lerp(playerFishNetTarget.transform.position, playerFishNet.transform.position, lerpFactor);
 		playerFishNet.transform.rotation = Quaternion.Lerp(playerFishNetTarget.transform.rotation, playerFishNet.transform.rotation, lerpFactor);
@@ -398,7 +412,11 @@ public class WorldUpdater : MonoBehaviour {
 		if (staticObjects != null)
 			foreach (var s in staticObjects)
 				s.go.transform.position -= deltaPlayerPos;
-	}
+
+        if (staticObjectslm1 != null)
+            foreach (var s in staticObjectslm1)
+                s.go.transform.position -= deltaPlayerPos;
+    }
 
     bool IsInsideSea(Vector3 pos)
     {
