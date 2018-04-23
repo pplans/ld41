@@ -234,7 +234,7 @@ public class WorldUpdater : MonoBehaviour {
 				Vector3 pos = path.Get3(((float)i+1) / (numberStaticObject+1));
 				pos += Vector3.Cross((pos - path.P1).normalized, Vector3.up) * Random.Range(1.0f, 2.0f);
 				StaticObject so = new StaticObject();
-				so.go = Instantiate(staticObjectPrefabs[(int)Random.Range(0.0f, (float)staticObjectPrefabs.Count - 1)]) as GameObject;
+				so.go = Instantiate(staticObjectPrefabs[Random.Range(0, staticObjectPrefabs.Count)]) as GameObject;
 				so.radius = so.go.transform.localScale.magnitude * 0.5f;
 				//so.go.transform.position = new Vector3(Random.Range(-MenuManager.instance.TrialLength, MenuManager.instance.TrialLength), 0.0f, Random.Range(-MenuManager.instance.TrialLength, MenuManager.instance.TrialLength));
 				so.go.transform.position = pos;

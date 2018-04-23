@@ -5071,6 +5071,7 @@ MonoBehaviour:
   numberStaticObject: 20
   staticObjectPrefabs:
   - {fileID: 1897605454040568, guid: ce4cba73430bb3242975d96372b38022, type: 2}
+  - {fileID: 1496031214110558, guid: 1c0b0981705b4b8468dd26d4e3b5f8c4, type: 2}
   numberIAs: 3
   backgroundMusic:
   - {fileID: 8300000, guid: 808cbb4d198ddb745ade8aabd16a9026, type: 3}
