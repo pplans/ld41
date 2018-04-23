@@ -39,6 +39,9 @@ ModelImporter:
     2100006: None__Untitled_001
     2100008: Material__Untitled
     2100010: Material__Untitled_001
+    2100012: Sail2__Untitled_001
+    2100014: Sail1__Untitled_001
+    2100016: Ship__Untitled
     2300000: Boat
     2300002: Cube
     2300004: Voile1
@@ -62,7 +65,22 @@ ModelImporter:
     13700000: Boat
     13700002: Sail1
     13700004: Sail2
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material__Untitled
+    second: {fileID: 2100000, guid: 66f01d9328e64064ea09d5e98eee2fd6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material__Untitled_001
+    second: {fileID: 2100000, guid: eaf52b812c929134f9d71498a257caa6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: None__Untitled_001
+    second: {fileID: 2100000, guid: eaf52b812c929134f9d71498a257caa6, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
