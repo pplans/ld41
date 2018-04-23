@@ -242,10 +242,9 @@ public class WorldUpdater : MonoBehaviour {
 		float lerpFactor = Mathf.Pow (2.0f, -fishNetRate * Time.deltaTime);
 		playerFishNet.transform.position = Vector3.Lerp(playerFishNetTarget.transform.position, playerFishNet.transform.position, lerpFactor);
 		playerFishNet.transform.rotation = Quaternion.Lerp(playerFishNetTarget.transform.rotation, playerFishNet.transform.rotation, lerpFactor);
-
+		
         playerFishNetAnchor.transform.position = playerFishNetAnchorTarget.transform.position;
         playerFishNetAnchor.transform.rotation = playerFishNetAnchorTarget.transform.rotation;
-
         return playerOffset;
     }
 
