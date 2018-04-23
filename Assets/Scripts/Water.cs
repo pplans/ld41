@@ -49,7 +49,7 @@ public class Water : MonoBehaviour
 	{
 		Clear();
 		Offset = Vector3.zero;
-		Generate(5, 1.0f, -1.0f);
+		Generate(10, 1.0f, -1.0f);
 	}
 
 	void Clear()
@@ -223,14 +223,16 @@ public class Water : MonoBehaviour
 	{
 		Mesh mesh = GetComponent<MeshFilter>().mesh;
 		Vector3[] vertices = mesh.vertices;
+		Vector3[] normals = mesh.normals;
 		int i = 0;
 		while (i < vertices.Length/2)
 		{
-			vertices[i].y = WaterLib.sea_map(Offset + vertices[i], time, sea_choppy, sea_level, sea_speed, sea_freq);
+			GetSurfacePosAndNormalForWPos (vertices [i], out vertices [i], out normals [i]);
 			i++;
 		}
 		mesh.vertices = vertices;
 		mesh.RecalculateBounds();
+		mesh.RecalculateNormals();
 		time += Time.deltaTime;
 		//if (time > Mathf.PI * 2.0f) time = 0.0f;
 
