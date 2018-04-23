@@ -109,6 +109,13 @@ public class WorldUpdater : MonoBehaviour {
 	public List<AudioClip> backgroundMusic;
 	private int CurrentMusic = -1;
 
+	const int SFX1 = 0;
+	const int SFX2 = 1;
+	const int SFX3 = 2;
+	const int SFX4 = 3;
+	public List<AudioClip> soundBank;
+	public AudioSource audioPlayer;
+
 	class BezierCurve
 	{
 		public Vector3 P1;
@@ -347,7 +354,17 @@ public class WorldUpdater : MonoBehaviour {
         }
     }
 
-    void MoveEverythingWithPlayer(Vector3 deltaPlayerPos)
+	void PlaySFX(int sfx)
+	{
+		if (sfx < soundBank.Count)
+		{
+			audioPlayer.clip = soundBank[sfx];
+			audioPlayer.Play();
+		}
+	}
+
+
+	void MoveEverythingWithPlayer(Vector3 deltaPlayerPos)
     {
         deltaPlayerPos.y = 0.0f;
 
@@ -453,6 +470,7 @@ public class WorldUpdater : MonoBehaviour {
 			Generate();
 			TimerSecondsLeft = TimerAtTheStart;
 			CurrentBuoy = -1;
+			PlaySFX(SFX4);
 		}
 		if(TimerSecondsLeft>0.0f)
 		{
@@ -506,7 +524,8 @@ public class WorldUpdater : MonoBehaviour {
 					ps.Play();
                     Animator animator = buoy.go.GetComponent<Animator>();
                     animator.SetBool("Triggered", true);
-                }
+					PlaySFX(SFX3);
+				}
 			}
 			// DrawHelp
 			if ((CurrentBuoy + 1) < buoys.Count)
