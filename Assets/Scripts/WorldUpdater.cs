@@ -10,6 +10,7 @@ public class WorldUpdater : MonoBehaviour {
     public Water sea;
 	public GameObject BuoyHelper = null;
 	public Text UIScoreValue = null;
+	public Text UIScoreValue2 = null;
 	public Text UINumBuoys = null;
 	public Text UITimer = null;
 	public ParticleSystem m_splash = null;
@@ -336,6 +337,7 @@ public class WorldUpdater : MonoBehaviour {
                 if ((playerBoat.transform.position - f.go.transform.position).sqrMagnitude < FishCatchSqrRange)
                 {
                     TimerSecondsLeft += MenuManager.instance.BonusTimeFish;
+					MenuManager.instance.IncrementScore (MenuManager.instance.BonusScoreFish);
                     // TODO : juice it up, display some FX
                     fishesToDelete.Add(f);
                 }
@@ -379,7 +381,6 @@ public class WorldUpdater : MonoBehaviour {
 		else
 		{
 			/* Ultimate End*/
-			MenuManager.instance.RegisterScore(computeScore());
 			TimerSecondsLeft = TimerAtTheStart;
 			CurrentBuoy = -1;
 			MenuManager.instance.EndGame();
@@ -389,6 +390,10 @@ public class WorldUpdater : MonoBehaviour {
 		if (UIScoreValue!=null)
 		{
 			UIScoreValue.text = MenuManager.instance.GetScore().ToString();
+		}
+		if (UIScoreValue2!=null)
+		{
+			UIScoreValue2.text = MenuManager.instance.GetScore().ToString();
 		}
 
 		if (UINumBuoys != null)

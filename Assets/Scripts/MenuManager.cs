@@ -96,6 +96,8 @@ public class MenuManager : MonoBehaviour
 	public float BonusTimeBuoy { get { return m_bonusTimeBuoy; } set { } }
 	public float m_bonusTimeFish = 2.0f;
 	public float BonusTimeFish { get { return m_bonusTimeFish; } set { } }
+	public float m_bonusScoreFish = 300.0f;
+	public float BonusScoreFish { get { return m_bonusScoreFish; } set { } }
 	public uint m_minBuoyNumber = 2;
 	public uint MinBuoyNumber { get { return m_minBuoyNumber; } set { } }
 	public uint m_maxBuoyNumber = 10;
