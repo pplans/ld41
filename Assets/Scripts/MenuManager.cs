@@ -83,6 +83,7 @@ public class MenuManager : MonoBehaviour
 	public GameObject m_UIGameOver;
 	public GameObject m_CameraGame;
 	public GameObject m_CameraUI;
+	public WorldUpdater m_WorldUpdater;
 	private float m_score;
 
 	public float m_trialLength = 1000.0f;
@@ -138,6 +139,8 @@ public class MenuManager : MonoBehaviour
 			// start the game here
 			Debug.Log("StartGame");
 			m_state = GameState.PLAYING;
+
+			m_WorldUpdater.Reset ();
 		}
 	}
 
@@ -155,6 +158,8 @@ public class MenuManager : MonoBehaviour
 			// start the game here
 			Debug.Log("StartGame");
 			m_state = GameState.PLAYINGNOTIMER;
+
+			m_WorldUpdater.Reset ();
 		}
 	}
 

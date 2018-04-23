@@ -112,6 +112,16 @@ public class WorldUpdater : MonoBehaviour {
 		ais = new List<AI>();
 	}
 
+	public void Reset () {
+		boatCurrentSpeed = 0.0f;
+		sea.Offset = Vector2.zero;
+		MenuManager.instance.RegisterScore (0);
+		TimerSecondsLeft = TimerAtTheStart;
+		Generate();
+		ais = new List<AI>();
+	}
+
+
 	void Generate()
 	{
 		CurrentBuoy = -1;
