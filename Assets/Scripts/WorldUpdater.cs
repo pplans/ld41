@@ -25,9 +25,11 @@ public class WorldUpdater : MonoBehaviour {
 	public Object aiPrefab;
 
 	private GameObject playerFishNet;
-	private GameObject playerFishNetTarget;
+    private GameObject playerFishNetAnchor;
+    private GameObject playerFishNetTarget;
+    private GameObject playerFishNetAnchorTarget;
 
-	public float boatRotationSpeed = 200.0f;
+    public float boatRotationSpeed = 200.0f;
     public float boatAcceleration = 2.0f;
     public float boatMaxSpeed = 0.5f;
     public float boatDrag = 1.0f;
@@ -117,8 +119,10 @@ public class WorldUpdater : MonoBehaviour {
 
 		if (playerBoat) {
 			playerFishNet = playerBoat.transform.parent.Find ("FishNet").gameObject;
-			playerFishNetTarget = playerBoat.transform.Find ("FishNetTarget").gameObject;
-		}
+            playerFishNetAnchor = playerBoat.transform.parent.Find("FishNet/Armature/Base/Anchor").gameObject;
+            playerFishNetTarget = playerBoat.transform.Find ("FishNetTarget").gameObject;
+            playerFishNetAnchorTarget = playerBoat.transform.Find("Armature/Base/FishNetAnchorTarget").gameObject;
+        }
 	}
 
 	public void Reset () {
@@ -231,7 +235,10 @@ public class WorldUpdater : MonoBehaviour {
 		playerFishNet.transform.position = Vector3.Lerp(playerFishNetTarget.transform.position, playerFishNet.transform.position, lerpFactor);
 		playerFishNet.transform.rotation = Quaternion.Lerp(playerFishNetTarget.transform.rotation, playerFishNet.transform.rotation, lerpFactor);
 
-		return playerOffset;
+        playerFishNetAnchor.transform.position = playerFishNetAnchorTarget.transform.position;
+        playerFishNetAnchor.transform.rotation = playerFishNetAnchorTarget.transform.rotation;
+
+        return playerOffset;
     }
 
 	private struct Sticker {
