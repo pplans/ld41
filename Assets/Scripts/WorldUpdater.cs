@@ -354,7 +354,17 @@ public class WorldUpdater : MonoBehaviour {
         }
     }
 
-    void MoveEverythingWithPlayer(Vector3 deltaPlayerPos)
+	void PlaySFX(int sfx)
+	{
+		if (sfx < soundBank.Count)
+		{
+			audioPlayer.clip = soundBank[sfx];
+			audioPlayer.Play();
+		}
+	}
+
+
+	void MoveEverythingWithPlayer(Vector3 deltaPlayerPos)
     {
         deltaPlayerPos.y = 0.0f;
 
@@ -460,6 +470,7 @@ public class WorldUpdater : MonoBehaviour {
 			Generate();
 			TimerSecondsLeft = TimerAtTheStart;
 			CurrentBuoy = -1;
+			PlaySFX(SFX4);
 		}
 		if(TimerSecondsLeft>0.0f)
 		{
@@ -513,11 +524,7 @@ public class WorldUpdater : MonoBehaviour {
 					ps.Play();
                     Animator animator = buoy.go.GetComponent<Animator>();
                     animator.SetBool("Triggered", true);
-					if (SFX3 < soundBank.Count)
-					{
-						audioPlayer.clip = soundBank[SFX3];
-						audioPlayer.Play();
-					}
+					PlaySFX(SFX3);
 				}
 			}
 			// DrawHelp
