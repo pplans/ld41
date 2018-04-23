@@ -4420,7 +4420,7 @@ Prefab:
     - target: {fileID: 114901613262150626, guid: 85311974839d0df4fa1ba005c883b159,
         type: 2}
       propertyPath: vertexScaling
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 85311974839d0df4fa1ba005c883b159, type: 2}
