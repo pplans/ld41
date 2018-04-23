@@ -67,7 +67,7 @@ Material:
     - _OcclusionStrength: 1
     - _Outline: 0.0158
     - _Parallax: 0.02
-    - _SeaWidth: 10
+    - _SeaWidth: 20
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
