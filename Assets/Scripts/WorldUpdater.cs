@@ -140,6 +140,8 @@ public class WorldUpdater : MonoBehaviour {
             playerFishNetAnchor = playerBoat.transform.parent.Find("FishNet/Armature/Base/Anchor").gameObject;
             playerFishNetTarget = playerBoat.transform.Find ("FishNetTarget").gameObject;
             playerFishNetAnchorTarget = playerBoat.transform.Find("Armature/Base/FishNetAnchorTarget").gameObject;
+			AudioSource asrc = playerBoat.GetComponent<AudioSource>();
+			asrc.Play();
         }
 	}
 
@@ -260,9 +262,11 @@ public class WorldUpdater : MonoBehaviour {
         else
         {
             boatCurrentSpeed = Mathf.Lerp(0.0f, boatCurrentSpeed, Mathf.Pow(2.0f, -boatDrag * Time.deltaTime));
-        }
+		}
+		AudioSource asrc = playerBoat.GetComponent<AudioSource>();
+		asrc.pitch = boatCurrentSpeed*4.0f;
 
-		if(m_splash!=null)
+		if (m_splash!=null)
 		{
 			var main = m_splash.main;
 			main.startLifetimeMultiplier = 2.0f*boatCurrentSpeed;
