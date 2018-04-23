@@ -231,8 +231,8 @@ public class WorldUpdater : MonoBehaviour {
 		{
 			for (int i = 0; i < numberStaticObject; ++i)
 			{
-				Vector3 pos = path.Get3((float)i / numberStaticObject);
-				pos += Vector3.Cross((pos - path.P1).normalized, Vector3.up) * Random.Range(4.0f, 6.0f);
+				Vector3 pos = path.Get3(((float)i+1) / (numberStaticObject+1));
+				pos += Vector3.Cross((pos - path.P1).normalized, Vector3.up) * Random.Range(1.0f, 2.0f);
 				StaticObject so = new StaticObject();
 				so.go = Instantiate(staticObjectPrefabs[(int)Random.Range(0.0f, (float)staticObjectPrefabs.Count - 1)]) as GameObject;
 				so.radius = so.go.transform.localScale.magnitude * 0.5f;

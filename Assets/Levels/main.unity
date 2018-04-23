@@ -5068,7 +5068,7 @@ MonoBehaviour:
   EndRun: {x: 10, y: 0, z: 10}
   NumberOfSteps: 4
   TimerAtTheStart: 10
-  numberStaticObject: 10
+  numberStaticObject: 20
   staticObjectPrefabs:
   - {fileID: 1897605454040568, guid: ce4cba73430bb3242975d96372b38022, type: 2}
   numberIAs: 3
