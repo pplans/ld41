@@ -8879,6 +8879,21 @@ CanvasRenderer:
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: 8fa821c2cfa979b4cb306c3ac5cd1776, type: 3}
   m_PrefabInternal: {fileID: 1974843520}
+--- !u!114 &1304557149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1304557148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f6b15d604569cf4c9c55265e6f22523, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundBank:
+  - {fileID: 8300000, guid: 371141a4a9ffb0d4d841157845920ca8, type: 3}
+  - {fileID: 8300000, guid: 1fd2a6e133d8b3247aee5f4b9f83b39d, type: 3}
+  - {fileID: 8300000, guid: b9b672f6631d26d4ab2c9c41431a028b, type: 3}
 --- !u!82 &1304557150
 AudioSource:
   m_ObjectHideFlags: 0

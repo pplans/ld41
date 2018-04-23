@@ -147,9 +147,7 @@ public class WorldUpdater : MonoBehaviour {
             playerFishNetAnchor = playerBoat.transform.parent.Find("FishNet/Armature/Base/Anchor").gameObject;
             playerFishNetTarget = playerBoat.transform.Find ("FishNetTarget").gameObject;
             playerFishNetAnchorTarget = playerBoat.transform.Find("Armature/Base/FishNetAnchorTarget").gameObject;
-			AudioSource asrc = playerBoat.GetComponent<AudioSource>();
-			asrc.Play();
-        }
+		}
 	}
 
 	public void Reset () {
@@ -270,8 +268,8 @@ public class WorldUpdater : MonoBehaviour {
         {
             boatCurrentSpeed = Mathf.Lerp(0.0f, boatCurrentSpeed, Mathf.Pow(2.0f, -boatDrag * Time.deltaTime));
 		}
-		AudioSource asrc = playerBoat.GetComponent<AudioSource>();
-		asrc.pitch = boatCurrentSpeed*4.0f;
+		// ENGINE SOUND
+		playerBoat.GetComponent<Boat>().UpdateAudio(boatCurrentSpeed*4.0f);
 
 		if (m_splash!=null)
 		{
@@ -414,6 +412,7 @@ public class WorldUpdater : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+		// MUSIC
 		AudioSource asrc = gameObject.GetComponent<AudioSource>();
 		if(!asrc.isPlaying)
 		{
@@ -421,6 +420,7 @@ public class WorldUpdater : MonoBehaviour {
 			asrc.Play();
 			CurrentMusic = (CurrentMusic+1)<backgroundMusic.Count-1?CurrentMusic+1:0;
 		}
+		// MUSIC
 
 		if (!(menu.GetState() == MenuManager.GameState.PLAYING || menu.GetState() == MenuManager.GameState.PLAYINGNOTIMER))
             return;
@@ -504,6 +504,7 @@ public class WorldUpdater : MonoBehaviour {
 					MenuManager.instance.IncrementScore (MenuManager.instance.BonusScoreFish);
                     // TODO : juice it up, display some FX
                     fishesToDelete.Add(f);
+					PlaySFX(SFX1); // sound
                 }
             }
             foreach (Fish f in fishesToDelete)
