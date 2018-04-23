@@ -234,43 +234,53 @@ public class WorldUpdater : MonoBehaviour {
 		return playerOffset;
     }
 
+	private struct Sticker {
+		public GameObject go;
+		public bool lerp;
+		public Sticker(GameObject _go, bool _lerp) {go=_go; lerp=_lerp;}
+	};
+
     void StickEverythingToSea()
     {
         Vector3 pos;
         Vector3 normal;
 
-        List<GameObject> objects = new List<GameObject>();
-        objects.Add(playerBoat);
+        List<Sticker> objects = new List<Sticker>();
+		objects.Add(new Sticker(playerBoat, true));
 
 		if(buoys!=null)
-        foreach (var b in buoys)
-            objects.Add(b.go);
+        	foreach (var b in buoys)
+				objects.Add(new Sticker(b.go, true));
 
         if (fishs != null)
             foreach (var b in fishs)
-                objects.Add(b.go);
+				objects.Add(new Sticker(b.go, false));
 
 		if (ais != null)
-			foreach (var b in fishs)
-				objects.Add(b.go);
+			foreach (var b in ais)
+				objects.Add(new Sticker(b.go, true));
 
 		Quaternion fixQuaternion = Quaternion.Euler(90, 0, 0) * Quaternion.Euler(0, 180, 0);
 
-        foreach (var go in objects)
+        foreach (var o in objects)
         {
+			var go = o.go;
             sea.GetSurfacePosAndNormalForWPos(go.transform.position, out pos, out normal);
-            pos.y += stickyOffset;
-            if (go.transform.position.y > pos.y)
-            {
-                go.transform.position = Vector3.Lerp(pos, go.transform.position, Mathf.Pow(2.0f, -stickyDownRate * Time.deltaTime));
-            }
-            else
-            {
-                go.transform.position = Vector3.Lerp(pos, go.transform.position, Mathf.Pow(2.0f, -stickyUpRate * Time.deltaTime));
-            }
+            
+			pos.y += stickyOffset;
+			Quaternion newQuaternion = Quaternion.LookRotation (normal, go.transform.rotation * Vector3.forward) * fixQuaternion;
 
-            Quaternion newQuaternion = Quaternion.LookRotation(normal, go.transform.rotation * Vector3.forward) * fixQuaternion;
-            go.transform.rotation = Quaternion.Lerp(newQuaternion, go.transform.rotation, Mathf.Pow(2.0f, -stickyTiltRate * Time.deltaTime));
+			if (o.lerp) {
+				if (go.transform.position.y > pos.y) {
+					go.transform.position = Vector3.Lerp (pos, go.transform.position, Mathf.Pow (2.0f, -stickyDownRate * Time.deltaTime));
+				} else {
+					go.transform.position = Vector3.Lerp (pos, go.transform.position, Mathf.Pow (2.0f, -stickyUpRate * Time.deltaTime));
+				}
+				go.transform.rotation = Quaternion.Lerp (newQuaternion, go.transform.rotation, Mathf.Pow (2.0f, -stickyTiltRate * Time.deltaTime));
+			} else {
+				go.transform.position = pos;
+				go.transform.rotation = newQuaternion;
+			}
         }
     }
 
