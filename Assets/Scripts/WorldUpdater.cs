@@ -232,18 +232,29 @@ public class WorldUpdater : MonoBehaviour {
 			for (int i = 0; i < numberStaticObject; ++i)
 			{
 				Vector3 pos = path.Get3(((float)i+1) / (numberStaticObject+1));
-				pos += Vector3.Cross((pos - path.P1).normalized, Vector3.up) * Random.Range(1.0f, 2.0f);
+				pos += Vector3.Cross((pos - path.P1).normalized, Vector3.up) * Random.Range(3.0f, 6.0f);
 				StaticObject so = new StaticObject();
 				so.go = Instantiate(staticObjectPrefabs[Random.Range(0, staticObjectPrefabs.Count)]) as GameObject;
-				so.radius = so.go.transform.localScale.magnitude * 0.5f;
+                so.radius = so.go.GetComponentInChildren<Renderer>().bounds.extents.magnitude * 0.5f; //so.go.transform.localScale.magnitude * 0.5f;
 				//so.go.transform.position = new Vector3(Random.Range(-MenuManager.instance.TrialLength, MenuManager.instance.TrialLength), 0.0f, Random.Range(-MenuManager.instance.TrialLength, MenuManager.instance.TrialLength));
 				so.go.transform.position = pos;
-				if ((playerBoat.transform.position - so.go.transform.position).magnitude < (so.radius + 0.5f))
-				{
-					so.go.transform.position += Vector3.right * 2.0f;
-				}
-				so.go.transform.Rotate(Vector3.up, Random.Range(0.0f, 360.0f));
-				staticObjects.Add(so);
+                so.go.transform.Rotate(Vector3.up, Random.Range(0.0f, 360.0f));
+
+                bool locationOk = true;
+
+				if ((playerBoat.transform.position - so.go.transform.position).magnitude < (so.radius + 1.5f))
+                    locationOk = false;
+
+                foreach (Buoy b in buoys)
+                {
+                    if ((b.go.transform.position - so.go.transform.position).magnitude < (so.radius + 1.5f))
+                        locationOk = false;
+                }
+
+                if (locationOk)
+                    staticObjects.Add(so);
+                else
+                    Destroy(so.go); // forget it
 			}
 		}
     }
