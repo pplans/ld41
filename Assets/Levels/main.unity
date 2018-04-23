@@ -704,6 +704,7 @@ MonoBehaviour:
   m_UIGameOver: {fileID: 1747320993}
   m_CameraGame: {fileID: 2128118415}
   m_CameraUI: {fileID: 1736493110}
+  m_WorldUpdater: {fileID: 1208099512}
   m_trialLength: 1000
   m_trialMinOffsetLength: 20
   m_trialMaxOffsetLength: 200
