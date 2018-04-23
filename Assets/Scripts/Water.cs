@@ -18,6 +18,8 @@ public class Water : MonoBehaviour
 
 	private float time;
 
+	public float vertexScaling = 5.0f;
+
 	public float sea_choppy = 4.0f;
 	public float sea_level = 0.5f;
 	public float sea_speed = 1.0f;
@@ -56,6 +58,11 @@ public class Water : MonoBehaviour
 	{
 	}
 
+	private float XZCompute(int i, int w)
+	{
+		return (i - (w - 1) * 0.5f) / ((w - 1) * 0.5f) * vertexScaling;
+	}
+
 	void Generate(int width, float top, float bot)
 	{
 		m_meshFilter = GetComponent<MeshFilter>();
@@ -91,21 +98,11 @@ public class Water : MonoBehaviour
 		for (int j = 0; j < width; j++)
 			for (int i = 0; i < width; i++, k++)
 			{
-				vertices[k] = new Vector3(
-					(i - (width-1) * 0.5f) / ((width-1)*0.5f),
-					top,
-					(j - (width-1) * 0.5f) / ((width-1)*0.5f)
+				vertices[k] = new Vector3(XZCompute(i, width), top, XZCompute(j, width)
 				);
 				normals[k] = Vector3.up;
-				uv[k] = new Vector2(
-					(float)i / (width-1),
-					(float)j / (width-1)
-					);
-				vertices[k+width*width] = new Vector3(
-					(i - (width - 1) * 0.5f) / ((width - 1) * 0.5f),
-					bot,
-					(j - (width - 1) * 0.5f) / ((width - 1) * 0.5f)
-				);
+				uv[k] = new Vector2((float)i / (width-1), (float)j / (width-1));
+				vertices[k+width*width] = new Vector3(XZCompute(i, width), bot, XZCompute(j, width));
 				normals[k + width * width] = -Vector3.up;
                 uv[k+width*width] = new Vector2(
 					-1.0f + 3.0f * ((float)i / (width-1)),

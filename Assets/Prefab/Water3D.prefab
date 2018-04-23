@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4952756192755158}
   - component: {fileID: 64203308379548026}
   - component: {fileID: 114901613262150626}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Water3D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ Transform:
   m_GameObject: {fileID: 1605359690580634}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 1, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -67,9 +67,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_material: {fileID: 2100000, guid: 16a8b38dd7e61564a8fe80f055e09a93, type: 2}
+  vertexScaling: 10
   sea_choppy: 4
   sea_level: 0.5
   sea_speed: 1
   sea_freq: 0.1
-  sea_offset_uvfactor: 0.1
+  sea_offset_uvfactor: -0.1
   Offset: {x: 0, y: 0, z: 0}
