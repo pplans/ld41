@@ -24,12 +24,11 @@ public class WorldUpdater : MonoBehaviour {
     public Object bigFishPrefab;
 	public Object aiPrefab;
 
-	private GameObject playerFishNet;
+    private GameObject playerFishNet;
     private GameObject playerFishNetAnchor;
     private GameObject playerFishNetTarget;
     private GameObject playerFishNetAnchorTarget;
-
-    public float boatRotationSpeed = 200.0f;
+	public float boatRotationSpeed = 200.0f;
     public float boatAcceleration = 2.0f;
     public float boatMaxSpeed = 0.5f;
     public float boatDrag = 1.0f;

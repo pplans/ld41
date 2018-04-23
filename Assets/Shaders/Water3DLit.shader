@@ -80,23 +80,24 @@
 			// Albedo comes from a texture tinted by color
 			fixed4 c = _Color;
 			float3 normal = IN.N;
-      if (IN.uv_DFFTex.x > 0.0 && IN.uv_DFFTex.x < 1.0 && IN.uv_DFFTex.y > 0.0 && IN.uv_DFFTex.y < 1.0)
+			if (IN.uv_DFFTex.x > 0.0 && IN.uv_DFFTex.x < 1.0 && IN.uv_DFFTex.y > 0.0 && IN.uv_DFFTex.y < 1.0)
 			{
 				float2 speedBoat = max(float2(0.001, 0.001), _SpeedBoatWind.xy);
 				float2 speedWind = max(float2(0.001, 0.001), _SpeedBoatWind.zw);
 				float2 uv = _BoatPosition.xy + _UVTiling * (IN.uv_DFFTex + (_Time.xx*speedBoat.xy*speedWind.xy));
+				float2 nuv = _BoatPosition.xy + _UVTiling * (IN.uv_DFFTex + (-_Time.xx*speedBoat.xy*speedWind.xy));
 				c = tex2D(_DFFTex, uv) * _Color;
-				normal = UnpackNormal(tex2D(_NormTex, uv));
+				normal = normalize(UnpackNormal(tex2D(_NormTex, nuv))+ UnpackNormal(tex2D(_NormTex, -uv)));
 				o.Metallic = _Metallic;
 				o.Smoothness = _Glossiness;
 			}
-      else
-      {
-	  float h = clamp(0.5*(1.0f+ IN.vertex.y), 0.0, 1.0);
-        c = lerp(float4(0.01, 0.05, 0.1, 1.0), float4(0.2, 0.5, 0.8, 1.0), h);//_SideColor;
-        o.Metallic = 0.f;
-        o.Smoothness = 0.f;
-      }
+			else
+			{
+				float h = clamp(0.5*(1.0f+ IN.vertex.y), 0.0, 1.0);
+				c = lerp(float4(0.01, 0.05, 0.1, 1.0), float4(0.2, 0.5, 0.8, 1.0), h);//_SideColor;
+				o.Metallic = 0.f;
+				o.Smoothness = 0.f;
+			}
 
 			/*Unity_GlossyEnvironmentData envData;
 			envData.roughness = 1 - 0.0f;
