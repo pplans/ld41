@@ -291,7 +291,7 @@ public class WorldUpdater : MonoBehaviour {
 		{
 			if((playerBoat.transform.position-s.go.transform.position).magnitude<(s.radius+0.5f))
 			{
-				playerOffset = Vector3.zero;
+				playerOffset = -playerOffset;
 			}
 		}
 
@@ -572,6 +572,14 @@ public class WorldUpdater : MonoBehaviour {
 			UINumBuoys.text = (CurrentBuoy+1)+"/"+NumberOfSteps;
 		}
 
+		if(UITimer.gameObject.activeSelf && menu.GetState() == MenuManager.GameState.PLAYINGNOTIMER)
+		{
+			UITimer.gameObject.SetActive(false);
+		}
+		else if(!UITimer.gameObject.activeSelf && menu.GetState() != MenuManager.GameState.PLAYINGNOTIMER)
+		{
+			UITimer.gameObject.SetActive(true);
+		}
 		if (UITimer != null)
 		{
 			UITimer.text = TimerSecondsLeft.ToString("F2")+"s";
