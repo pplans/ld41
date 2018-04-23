@@ -106,7 +106,10 @@ public class WorldUpdater : MonoBehaviour {
 	}
 	private List<AI> ais = null;
 
-    class BezierCurve
+	public List<AudioClip> backgroundMusic;
+	private int CurrentMusic = -1;
+
+	class BezierCurve
 	{
 		public Vector3 P1;
 		public Vector3 P2;
@@ -390,7 +393,15 @@ public class WorldUpdater : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (!(menu.GetState() == MenuManager.GameState.PLAYING || menu.GetState() == MenuManager.GameState.PLAYINGNOTIMER))
+		AudioSource asrc = gameObject.GetComponent<AudioSource>();
+		if(!asrc.isPlaying)
+		{
+			asrc.clip = backgroundMusic[CurrentMusic+1];
+			asrc.Play();
+			CurrentMusic = (CurrentMusic+1)<backgroundMusic.Count-1?CurrentMusic+1:0;
+		}
+
+		if (!(menu.GetState() == MenuManager.GameState.PLAYING || menu.GetState() == MenuManager.GameState.PLAYINGNOTIMER))
             return;
 
         Vector3 playerOffset = UpdatePlayer();
