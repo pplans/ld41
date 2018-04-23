@@ -14,6 +14,7 @@ public class WorldUpdater : MonoBehaviour {
 	public Text UINumBuoys = null;
 	public Text UITimer = null;
 	public Text UIPlayerPosition = null;
+	public Text UIPlayerPositionInGame = null;
 	public ParticleSystem m_splash = null;
 
     public float BuoyCatchSqrRange = 1.0f;
@@ -425,7 +426,15 @@ public class WorldUpdater : MonoBehaviour {
 		if (!(menu.GetState() == MenuManager.GameState.PLAYING || menu.GetState() == MenuManager.GameState.PLAYINGNOTIMER))
             return;
 
-        Vector3 playerOffset = UpdatePlayer();
+		int playerPosition = ais.Count + 1;
+		foreach (AI a in ais)
+		{
+			if (CurrentBuoy > a.CurrentBuoy)
+				playerPosition--;
+		}
+		MenuManager.instance.PlayerPosition = playerPosition;
+
+		Vector3 playerOffset = UpdatePlayer();
 
         MoveEverythingWithPlayer(playerOffset);
         StickEverythingToSea();
@@ -444,13 +453,6 @@ public class WorldUpdater : MonoBehaviour {
 					{
 						// AI arrived before you
 						TimerSecondsLeft = TimerAtTheStart;
-						int playerPosition = ais.Count+1;
-						foreach(AI a in ais)
-						{
-							if (CurrentBuoy > a.CurrentBuoy)
-								playerPosition--;
-						}
-						MenuManager.instance.PlayerPosition = playerPosition;
 						CurrentBuoy = -1;
 						MenuManager.instance.EndGame();
 					}
@@ -577,6 +579,10 @@ public class WorldUpdater : MonoBehaviour {
 			UIPlayerPosition.text = MenuManager.instance.PlayerPosition.ToString()+"/"+(numberIAs+1);
 		}
 
+		if (UIPlayerPositionInGame != null)
+		{
+			UIPlayerPositionInGame.text = MenuManager.instance.PlayerPosition.ToString() + "/" + (numberIAs + 1);
+		}
 
 		ClipEverythingOutsideSea();
 	}
