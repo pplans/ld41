@@ -24,6 +24,8 @@ public class WorldUpdater : MonoBehaviour {
     public Object bigFishPrefab;
 	public Object aiPrefab;
 
+	private GameObject playerFishNet;
+	private GameObject playerFishNetTarget;
 
 	public float boatRotationSpeed = 200.0f;
     public float boatAcceleration = 2.0f;
@@ -35,6 +37,7 @@ public class WorldUpdater : MonoBehaviour {
     public float stickyDownRate = 9.8f;
     public float stickyTiltRate = 9.8f;
     public float stickyOffset = -0.05f;
+	public float fishNetRate = 9.8f;
 
     public float seaWidth = 12.0f; // supposed to be 10 but we had a margin
 
@@ -111,6 +114,11 @@ public class WorldUpdater : MonoBehaviour {
 		TimerSecondsLeft = TimerAtTheStart;
 		Generate();
 		ais = new List<AI>();
+
+		if (playerBoat) {
+			playerFishNet = playerBoat.transform.parent.Find ("FishNet").gameObject;
+			playerFishNetTarget = playerBoat.transform.Find ("FishNetTarget").gameObject;
+		}
 	}
 
 	public void Reset () {
@@ -215,7 +223,15 @@ public class WorldUpdater : MonoBehaviour {
         boatAnimator.SetFloat("Direction", direction);
         boatAnimator.SetFloat("Speed", boatCurrentSpeed);
 
-        return (playerBoat.transform.rotation * Vector3.forward) * boatCurrentSpeed;
+		Vector3 playerOffset = (playerBoat.transform.rotation * Vector3.forward) * boatCurrentSpeed;
+
+		// Update fishnet location
+		playerFishNet.transform.position -= playerOffset;
+		float lerpFactor = Mathf.Pow (2.0f, -fishNetRate * Time.deltaTime);
+		playerFishNet.transform.position = Vector3.Lerp(playerFishNetTarget.transform.position, playerFishNet.transform.position, lerpFactor);
+		playerFishNet.transform.rotation = Quaternion.Lerp(playerFishNetTarget.transform.rotation, playerFishNet.transform.rotation, lerpFactor);
+
+		return playerOffset;
     }
 
     void StickEverythingToSea()
@@ -334,7 +350,7 @@ public class WorldUpdater : MonoBehaviour {
             List<Fish> fishesToDelete = new List<Fish>();
             foreach (Fish f in fishs)
             {
-                if ((playerBoat.transform.position - f.go.transform.position).sqrMagnitude < FishCatchSqrRange)
+				if ((playerFishNet.transform.position - f.go.transform.position).sqrMagnitude < FishCatchSqrRange)
                 {
                     TimerSecondsLeft += MenuManager.instance.BonusTimeFish;
 					MenuManager.instance.IncrementScore (MenuManager.instance.BonusScoreFish);
