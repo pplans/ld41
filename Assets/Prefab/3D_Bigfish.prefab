@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4115470062752186}
   - component: {fileID: 137769642249936922}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BigFish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35,7 +35,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4506654950198402}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Swim1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +51,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4553078652999964}
   - component: {fileID: 95625249388827462}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: 3D_Bigfish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,7 +66,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4064004346634256}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,7 +81,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4284147482899604}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ring_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4410272979898556}
   - component: {fileID: 137395367795675556}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4676917276647026}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Armature
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4261556682393146}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Swim3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,7 +142,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4644408539112452}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Swim2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
