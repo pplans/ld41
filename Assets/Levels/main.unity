@@ -1594,9 +1594,8 @@ MonoBehaviour:
   - {fileID: 1496031214110558, guid: 1c0b0981705b4b8468dd26d4e3b5f8c4, type: 2}
   numberIAs: 3
   backgroundMusic:
-  - {fileID: 8300000, guid: 808cbb4d198ddb745ade8aabd16a9026, type: 3}
-  - {fileID: 8300000, guid: c00ef591aeaf2424f92647023cfdf710, type: 3}
   - {fileID: 8300000, guid: 76e92929fd7301a4fa3b85332b3e4150, type: 3}
+  - {fileID: 8300000, guid: c00ef591aeaf2424f92647023cfdf710, type: 3}
   soundBank:
   - {fileID: 8300000, guid: c767ba4259557a849a71d8e6601ae482, type: 3}
   - {fileID: 8300000, guid: 47f2c0b61fbe5d94985ce7c70a2fb6ce, type: 3}
