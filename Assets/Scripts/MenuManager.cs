@@ -80,6 +80,7 @@ public class MenuManager : MonoBehaviour
 
 	private GameState m_state;
 	public GameObject m_UIMain;
+	public GameObject m_UIGame;
 	public GameObject m_UIGameOver;
 	public GameObject m_CameraGame;
 	public GameObject m_CameraUI;
@@ -126,6 +127,7 @@ public class MenuManager : MonoBehaviour
 		m_CameraGame.SetActive(false);
 
 		m_UIGameOver.SetActive(false);
+		m_UIGame.SetActive(false);
 		m_UIMain.SetActive(true);
 	}
 
@@ -138,6 +140,7 @@ public class MenuManager : MonoBehaviour
 			m_CameraGame.SetActive(true);
 			m_CameraUI.SetActive(false);
 
+			m_UIGame.SetActive(true);
 			m_UIMain.SetActive(false);
 			m_UIGameOver.SetActive(false);
 			// start the game here
@@ -157,6 +160,7 @@ public class MenuManager : MonoBehaviour
 			m_CameraGame.SetActive(true);
 			m_CameraUI.SetActive(false);
 
+			m_UIGame.SetActive(true);
 			m_UIMain.SetActive(false);
 			m_UIGameOver.SetActive(false);
 			// start the game here
@@ -177,6 +181,7 @@ public class MenuManager : MonoBehaviour
 			m_CameraUI.SetActive(true);
 			m_CameraGame.SetActive(false);
 
+			m_UIGame.SetActive(false);
 			m_UIMain.SetActive(false);
 			m_UIGameOver.SetActive(true);
 		}
