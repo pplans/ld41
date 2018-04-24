@@ -509,6 +509,10 @@ public class WorldUpdater : MonoBehaviour {
 			TimerSecondsLeft = TimerAtTheStart;
 			CurrentBuoy = -1;
 			PlaySFX(SFX4);
+			foreach(AI a in ais)
+			{
+				a.currentSpeed = Random.Range(0.05f, boatMaxSpeed * 0.50f);
+			}
 		}
 		if(TimerSecondsLeft>0.0f)
 		{
@@ -519,7 +523,7 @@ public class WorldUpdater : MonoBehaviour {
 				Vector3 aiRandomOffset = new Vector3(Random.Range(-BuoyCatchSqrRangeAI, BuoyCatchSqrRangeAI), 0.0f, Random.Range(-BuoyCatchSqrRangeAI, BuoyCatchSqrRangeAI));
 				ai.go.transform.position = playerBoat.transform.position + aiRandomOffset;
 				ai.CurrentBuoy = -1;
-				ai.currentSpeed = Random.Range(0.05f, boatMaxSpeed*0.65f);
+				ai.currentSpeed = Random.Range(0.05f, boatMaxSpeed*0.50f);
 				if ((ai.CurrentBuoy + 1) < buoys.Count)
 				{
 					Buoy buoy = buoys[ai.CurrentBuoy + 1];
