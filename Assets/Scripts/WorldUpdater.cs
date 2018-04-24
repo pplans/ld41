@@ -519,7 +519,7 @@ public class WorldUpdater : MonoBehaviour {
 				Vector3 aiRandomOffset = new Vector3(Random.Range(-BuoyCatchSqrRangeAI, BuoyCatchSqrRangeAI), 0.0f, Random.Range(-BuoyCatchSqrRangeAI, BuoyCatchSqrRangeAI));
 				ai.go.transform.position = playerBoat.transform.position + aiRandomOffset;
 				ai.CurrentBuoy = -1;
-				ai.currentSpeed = Random.Range(0.05f, boatMaxSpeed*0.2f);
+				ai.currentSpeed = Random.Range(0.05f, boatMaxSpeed*0.65f);
 				if ((ai.CurrentBuoy + 1) < buoys.Count)
 				{
 					Buoy buoy = buoys[ai.CurrentBuoy + 1];
@@ -602,7 +602,7 @@ public class WorldUpdater : MonoBehaviour {
 
 		if (UINumBuoys != null)
 		{
-			UINumBuoys.text = (CurrentBuoy+1)+"/"+NumberOfSteps;
+			UINumBuoys.text = (CurrentBuoy+1)+" OVER "+NumberOfSteps;
 		}
 
 		if(UITimer.gameObject.activeSelf && menu.GetState() == MenuManager.GameState.PLAYINGNOTIMER)
@@ -615,17 +615,37 @@ public class WorldUpdater : MonoBehaviour {
 		}
 		if (UITimer != null)
 		{
-			UITimer.text = TimerSecondsLeft.ToString("F2")+"s";
+			UITimer.text = TimerSecondsLeft.ToString("F2");
 		}
 
-		if (UIPlayerPosition != null)
+		if (UIPlayerPosition != null || UIPlayerPositionInGame != null)
 		{
-			UIPlayerPosition.text = MenuManager.instance.PlayerPosition.ToString()+"/"+(numberIAs+1);
-		}
+			string rank = MenuManager.instance.PlayerPosition.ToString();
+			switch (MenuManager.instance.PlayerPosition)
+			{
+				case 1:
+					rank = MenuManager.instance.PlayerPosition.ToString() + "ST";
+					break;
+				case 2:
+					rank = MenuManager.instance.PlayerPosition.ToString() + "ND";
+					break;
+				case 3:
+					rank = MenuManager.instance.PlayerPosition.ToString() + "RD";
+					break;
+				default:
+					rank = MenuManager.instance.PlayerPosition.ToString() + "TH";
+					break;
+			}
 
-		if (UIPlayerPositionInGame != null)
-		{
-			UIPlayerPositionInGame.text = MenuManager.instance.PlayerPosition.ToString() + "/" + (numberIAs + 1);
+			if (UIPlayerPosition != null)
+			{
+				UIPlayerPosition.text = MenuManager.instance.PlayerPosition.ToString() + " / " + (numberIAs + 1);
+			}
+
+			if (UIPlayerPositionInGame != null)
+			{
+				UIPlayerPositionInGame.text = rank + " OVER " + (numberIAs + 1);
+			}
 		}
 
 		ClipEverythingOutsideSea();
