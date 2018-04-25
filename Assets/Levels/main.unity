@@ -582,23 +582,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 137415967438798306, guid: d57f4e8a6f6e82542b1faa951395ca25,
-        type: 2}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: d8c9485383316ec41a50589cb17c3bb6, type: 2}
-    - target: {fileID: 4913439358476460, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -0.93
-      objectReference: {fileID: 0}
-    - target: {fileID: 4913439358476460, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -0.03
-      objectReference: {fileID: 0}
-    - target: {fileID: 4913439358476460, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -1.02
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d57f4e8a6f6e82542b1faa951395ca25, type: 2}
   m_IsPrefabParent: 0
@@ -1564,6 +1547,7 @@ MonoBehaviour:
   UIScoreValue2: {fileID: 2085558865}
   UINumBuoys: {fileID: 548312104}
   UITimer: {fileID: 905502576}
+  UIClock: {fileID: 1698276906}
   UIPlayerPosition: {fileID: 1297200689}
   UIPlayerPositionInGame: {fileID: 2079313674}
   m_splash: {fileID: 1177786106}

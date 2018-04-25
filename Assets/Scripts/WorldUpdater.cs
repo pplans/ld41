@@ -13,7 +13,8 @@ public class WorldUpdater : MonoBehaviour {
 	public Text UIScoreValue2 = null;
 	public Text UINumBuoys = null;
 	public Text UITimer = null;
-	public Text UIPlayerPosition = null;
+    public Image UIClock = null;
+    public Text UIPlayerPosition = null;
 	public Text UIPlayerPositionInGame = null;
 	public ParticleSystem m_splash = null;
 
@@ -53,6 +54,8 @@ public class WorldUpdater : MonoBehaviour {
 	// Timer
 	public float TimerAtTheStart = 60.0f;
 	private float TimerSecondsLeft;
+
+    private bool ArrowReachedBuoy = false;
 
 	class Buoy
 	{
@@ -331,7 +334,7 @@ public class WorldUpdater : MonoBehaviour {
             {
                 if ((playerBoat.transform.position - s.go.transform.position).magnitude < (s.radius + 0.5f))
                 {
-                    playerOffset = -playerOffset;
+                    playerOffset = -1.2f * playerOffset;
                     boatCurrentSpeed *= -1.0f;
                     PlaySFX(SFX6);
                 }
@@ -614,8 +617,38 @@ public class WorldUpdater : MonoBehaviour {
 				Buoy buoy = buoys[CurrentBuoy + 1];
 				if (BuoyHelper != null)
 				{
-					BuoyHelper.transform.LookAt(buoy.go.transform);
-				}
+                    float lerpFactor = Mathf.Pow(2.0f, -30.0f * Time.deltaTime);
+                    if ((playerBoat.transform.position-buoy.go.transform.position).sqrMagnitude < (9.0f*9.0f))
+                    {
+                        Transform arrow = BuoyHelper.transform.Find("arrow").transform;
+                        Transform anchor = buoy.go.transform.Find("ArrowAttachPoint").transform;
+
+                        if (ArrowReachedBuoy)
+                        {
+                            arrow.position = anchor.position;
+                            arrow.rotation = anchor.rotation;
+                        }
+                        else
+                        {
+                            arrow.position = Vector3.Lerp(anchor.position, arrow.position, lerpFactor);
+                            arrow.rotation = Quaternion.Lerp(anchor.rotation, arrow.rotation, lerpFactor);
+
+                            ArrowReachedBuoy = (arrow.position - anchor.position).sqrMagnitude < (1.0f * 1.0f);
+                        }
+                    }
+                    else
+                    {
+                        ArrowReachedBuoy = false;
+                        BuoyHelper.transform.LookAt(buoy.go.transform);
+
+                        Transform arrow = BuoyHelper.transform.Find("arrow").transform;
+                        Transform anchor = BuoyHelper.transform.Find("HelperAttachPoint").transform;
+                        arrow.position = Vector3.Lerp(anchor.position, arrow.position, lerpFactor);
+                        arrow.rotation = Quaternion.Lerp(anchor.rotation, arrow.rotation, lerpFactor);
+                    }
+                    BuoyHelper.transform.Find("arrow").GetComponent<Animator>().SetBool("Point", ArrowReachedBuoy);
+
+                }
 			}
 
 			// Updating timer until the end
@@ -655,11 +688,13 @@ public class WorldUpdater : MonoBehaviour {
 		if(UITimer.gameObject.activeSelf && menu.GetState() == MenuManager.GameState.PLAYINGNOTIMER)
 		{
 			UITimer.gameObject.SetActive(false);
-		}
+            UIClock.gameObject.SetActive(false);
+        }
 		else if(!UITimer.gameObject.activeSelf && menu.GetState() != MenuManager.GameState.PLAYINGNOTIMER)
 		{
 			UITimer.gameObject.SetActive(true);
-		}
+            UIClock.gameObject.SetActive(true);
+        }
 		if (UITimer != null)
 		{
 			UITimer.text = ((int)TimerSecondsLeft).ToString();
