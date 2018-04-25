@@ -115,10 +115,15 @@ public class WorldUpdater : MonoBehaviour {
 	const int SFX2 = 1;
 	const int SFX3 = 2;
 	const int SFX4 = 3;
-	public List<AudioClip> soundBank;
+    const int SFX5 = 4;
+    const int SFX6 = 5;
+    const int SFX7 = 6;
+    public List<AudioClip> soundBank;
 	public AudioSource audioPlayer;
 
-	class BezierCurve
+    private Color defaultUITimerColor;
+
+    class BezierCurve
 	{
 		public Vector3 P1;
 		public Vector3 P2;
@@ -150,14 +155,32 @@ public class WorldUpdater : MonoBehaviour {
             playerFishNetTarget = playerBoat.transform.Find ("FishNetTarget").gameObject;
             playerFishNetAnchorTarget = playerBoat.transform.Find("Armature/Base/FishNetAnchorTarget").gameObject;
 		}
-	}
+
+        defaultUITimerColor = UITimer.color;
+
+    }
 
 	public void Reset () {
 		boatCurrentSpeed = 0.0f;
 		sea.Offset = Vector2.zero;
 		MenuManager.instance.RegisterScore (0);
 		TimerSecondsLeft = TimerAtTheStart;
-		Generate();
+
+        if (staticObjects != null)
+            foreach (StaticObject s in staticObjects)
+                Destroy(s.go);
+        staticObjects = null;
+        if (staticObjectslm1 != null)
+            foreach (StaticObject s in staticObjectslm1)
+                Destroy(s.go);
+        staticObjectslm1 = null;
+
+        Generate();
+
+        if (ais != null)
+            foreach (AI a in ais)
+                Destroy(a.go);
+
 		ais = new List<AI>();
 	}
 
@@ -301,22 +324,31 @@ public class WorldUpdater : MonoBehaviour {
         boatAnimator.SetFloat("Speed", boatCurrentSpeed);
 
 		Vector3 playerOffset = (playerBoat.transform.rotation * Vector3.forward) * boatCurrentSpeed;
-		// collision
-		foreach(StaticObject s in staticObjects)
-		{
-			if((playerBoat.transform.position-s.go.transform.position).magnitude<(s.radius+0.5f))
-			{
-				playerOffset = -playerOffset;
-                boatCurrentSpeed *= -1.0f;
-			}
-		}
         // collision
-        foreach (StaticObject s in staticObjectslm1)
+        if (staticObjects != null)
         {
-            if ((playerBoat.transform.position - s.go.transform.position).magnitude < (s.radius + 0.5f))
+            foreach (StaticObject s in staticObjects)
             {
-                playerOffset = -playerOffset;
-                boatCurrentSpeed *= -1.0f;
+                if ((playerBoat.transform.position - s.go.transform.position).magnitude < (s.radius + 0.5f))
+                {
+                    playerOffset = -playerOffset;
+                    boatCurrentSpeed *= -1.0f;
+                    PlaySFX(SFX6);
+                }
+            }
+        }
+
+        // collision
+        if (staticObjectslm1 != null)
+        {
+            foreach (StaticObject s in staticObjectslm1)
+            {
+                if ((playerBoat.transform.position - s.go.transform.position).magnitude < (s.radius + 0.5f))
+                {
+                    playerOffset = -playerOffset;
+                    boatCurrentSpeed *= -1.0f;
+                    PlaySFX(SFX6);
+                }
             }
         }
 
@@ -438,13 +470,19 @@ public class WorldUpdater : MonoBehaviour {
 			foreach (var comp in a.go.GetComponentsInChildren<Renderer>())
 				comp.enabled = IsInsideSea(a.go.transform.position);
 
-		foreach (StaticObject s in staticObjects)
-			foreach (var comp in s.go.GetComponentsInChildren<Renderer>())
-				comp.enabled = IsInsideSea(s.go.transform.position);
+        if (staticObjects != null)
+        {
+            foreach (StaticObject s in staticObjects)
+                foreach (var comp in s.go.GetComponentsInChildren<Renderer>())
+                    comp.enabled = IsInsideSea(s.go.transform.position);
+        }
 
-        foreach (StaticObject s in staticObjectslm1)
-            foreach (var comp in s.go.GetComponentsInChildren<Renderer>())
-                comp.enabled = IsInsideSea(s.go.transform.position);
+        if (staticObjectslm1 != null)
+        {
+            foreach (StaticObject s in staticObjectslm1)
+                foreach (var comp in s.go.GetComponentsInChildren<Renderer>())
+                    comp.enabled = IsInsideSea(s.go.transform.position);
+        }
     }
 
     // Update is called once per frame
@@ -583,8 +621,13 @@ public class WorldUpdater : MonoBehaviour {
 			// Updating timer until the end
 			if (MenuManager.instance.GetState()==MenuManager.GameState.PLAYING && (CurrentBuoy + 1) < NumberOfSteps)
 			{
+                int IntTimerBefore = (int)TimerSecondsLeft;
 				TimerSecondsLeft -= Time.deltaTime;
-			}
+                int IntTimerAfter = (int)TimerSecondsLeft;
+
+                if (IntTimerAfter < 10 && IntTimerBefore != IntTimerAfter)
+                    PlaySFX(SFX7);
+            }
 		}
 		else
 		{
@@ -619,8 +662,13 @@ public class WorldUpdater : MonoBehaviour {
 		}
 		if (UITimer != null)
 		{
-			UITimer.text = TimerSecondsLeft.ToString("F2");
-		}
+			UITimer.text = ((int)TimerSecondsLeft).ToString();
+            if (TimerSecondsLeft <= 10.0f)
+                UITimer.color = Color.red;
+            else
+                UITimer.color = defaultUITimerColor;
+
+        }
 
 		if (UIPlayerPosition != null || UIPlayerPositionInGame != null)
 		{

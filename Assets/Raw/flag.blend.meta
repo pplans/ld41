@@ -1,31 +1,18 @@
 fileFormatVersion: 2
-guid: f6aca4fe76dc26d4bbe5ec129d84c937
-timeCreated: 1524396596
+guid: 4976936edd5dccf42b1bb22bcf6fd52d
+timeCreated: 1524689509
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Arm_L
-    100004: Arm_R
-    100006: Armature
-    100008: Arrow
-    100010: Base
     400000: //RootNode
-    400002: Arm_L
-    400004: Arm_R
-    400006: Armature
-    400008: Arrow
-    400010: Base
-    2100000: Material
+    2100000: Material__flag_png
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Arrow
+    4300000: Cube
     7400000: Default Take
-    7400002: Idle
-    7400004: Point
     9500000: //RootNode
-    13700000: Arrow
   externalObjects: {}
   materials:
     importMaterials: 1
